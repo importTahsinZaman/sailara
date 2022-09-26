@@ -8,15 +8,15 @@ import {
   updateDoc,
   getFirestore,
 } from "firebase/firestore";
-import ImageUploader from "../../components/ImageUploader";
 
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import Select from "react-select";
 
 export default function AdminPostEdit(props) {
   return (
@@ -49,12 +49,11 @@ function PostManager() {
           <section>
             <h1>{post.title}</h1>
             <p>ID: {post.slug}</p>
-
             <PostForm
               postRef={postRef}
               defaultValues={post}
               preview={preview}
-            />
+            />{" "}
           </section>
 
           <aside>
@@ -62,9 +61,6 @@ function PostManager() {
             <button onClick={() => setPreview(!preview)}>
               {preview ? "Edit" : "Preview"}
             </button>
-            <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue">Live view</button>
-            </Link>
             <DeletePostButton postRef={postRef} />
           </aside>
         </>
@@ -74,52 +70,279 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-  const { register, errors, handleSubmit, formState, reset, watch } = useForm({
-    defaultValues,
-    mode: "onChange",
-  });
+  const { register, errors, handleSubmit, formState, reset, watch, control } =
+    useForm({
+      defaultValues,
+      mode: "onChange",
+    });
 
   const { isValid, isDirty } = formState;
 
-  const updatePost = async ({ content, published }) => {
+  const updatePost = async ({
+    subject,
+    type,
+    description,
+    duration,
+    link,
+    published,
+    grade,
+    pays,
+    virtual,
+    hasCost,
+    race,
+    ethnicity,
+    gender,
+    firstgen,
+    income,
+  }) => {
     await updateDoc(postRef, {
-      content,
+      content: {
+        subject,
+        type,
+        description,
+        duration,
+        link,
+        grade,
+        pays,
+        virtual,
+        hasCost,
+        race,
+        ethnicity,
+        gender,
+        firstgen,
+        income,
+      },
       published,
       updatedAt: serverTimestamp(),
     });
 
-    reset({ content, published });
+    reset({
+      subject,
+      type,
+      description,
+      published,
+      duration,
+      link,
+      grade,
+      pays,
+      virtual,
+      hasCost,
+      race,
+      ethnicity,
+      gender,
+      firstgen,
+      income,
+    });
 
     toast.success("Post updated successfully!");
   };
+
+  const gradeOptions = [
+    { value: "9", label: "9" },
+    { value: "10", label: "10" },
+    { value: "11", label: "11" },
+    { value: "12", label: "12" },
+  ];
+
+  const raceOptions = [
+    {
+      value: "American Indian or Alaskan Native",
+      label: "American Indian or Alaskan Native",
+    },
+    { value: "Asian", label: "Asian" },
+    { value: "Black or African American", label: "Black or African American" },
+    {
+      value: "Native Hawaiian or Pacific Islander",
+      label: "Native Hawaiian or Pacific Islander",
+    },
+    { value: "White", label: "White" },
+    { value: "Other", label: "Other" },
+  ];
+
+  const ethnicityOptions = [
+    {
+      value: "Not of Hispanic, Latino/a/x, or Spanish origin",
+      label: "Not of Hispanic, Latino/a/x, or Spanish origin",
+    },
+    {
+      value: "Mexican, Mexican American, Chicano/a/x",
+      label: "Mexican, Mexican American, Chicano/a/x",
+    },
+    { value: "Puerto Rican", label: "Puerto Rican" },
+    { value: "Cuban", label: "Cuban" },
+    { value: "Other", label: "Other" },
+  ];
+
+  const genderOptions = [
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
+    { value: "Other/Multiple", label: "Other/Multiple" },
+  ];
 
   return (
     <form onSubmit={handleSubmit(updatePost)}>
       {preview && <div className="card"></div>}
 
       <div className={preview ? styles.hidden : styles.controls}>
-        <ImageUploader />
+        <label>Program Subject:</label>
+        <select {...register("subject")}>
+          <option value="Activism">Activism</option>
+          <option value="Administration">Administration</option>
+          <option value="Advocacy">Advocacy</option>
+          <option value="Animation">Animation</option>
+          <option value="Arts">Arts</option>
+          <option value="Business">Business</option>
+          <option value="Career">Career</option>
+          <option value="Civics">Civics</option>
+          <option value="Culture">Culture</option>
+          <option value="Dance">Dance</option>
+          <option value="Democracy">Democracy</option>
+          <option value="Education">Education</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Environmental">Environmental</option>
+          <option value="Film">Film</option>
+          <option value="Finance">Finance</option>
+          <option value="Genetics">Genetics</option>
+          <option value="Graphic Design">Graphic Design</option>
+          <option value="Human Resources">Human Resources</option>
+          <option value="Journalism">Journalism</option>
+          <option value="Leadership">Leadership</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Math">Math</option>
+          <option value="Medicine">Medicine</option>
+          <option value="Music">Music</option>
+          <option value="Outreach">Outreach</option>
+          <option value="Photography">Photography</option>
+          <option value="Research">Research</option>
+          <option value="STEM">STEM</option>
+          <option value="Social Justice">Social Justice</option>
+          <option value="Teaching">Teaching</option>
+          <option value="Tech">Tech</option>
+          <option value="Web Design">Web Design</option>
+        </select>
 
-        <textarea
-          name="content"
-          ref={register({
-            maxLength: { value: 20000, message: "content is too long" },
-            minLength: { value: 10, message: "content is too short" },
-            required: { value: true, message: "content is required" },
-          })}
-        ></textarea>
+        <label>Program Type:</label>
+        <select {...register("type")}>
+          <option value="Summer Program">Summer Program</option>
+          <option value="School Year Program">School Year Program</option>
+          <option value="1-4 Year Program">1-4 Year Program</option>
+          <option value="Internship">Internship</option>
+          <option value="College Prep Program">College Prep Program</option>
+          <option value="Scholarship">Scholarship</option>
+        </select>
 
-        {errors.content && (
-          <p className="text-danger">{errors.content.message}</p>
-        )}
+        <label>Program Description:</label>
+        <textarea {...register("description")}></textarea>
 
-        <fieldset>
-          <input
-            className={styles.checkbox}
-            name="published"
-            type="checkbox"
-            ref={register}
-          />
+        <label>Program Duration/Attendance Requirements:</label>
+        <textarea {...register("duration")}></textarea>
+
+        <label>Website/Infographic Link:</label>
+        <input type="text" {...register("link")}></input>
+
+        <label>Student Grade (rising grade if summer program):</label>
+        <Controller
+          name="grade"
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={gradeOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={gradeOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+              ></Select>
+            );
+          }}
+        />
+
+        <label>Students will be payed:</label>
+        <select {...register("pays")}>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+
+        <label>Program is virtual:</label>
+        <select {...register("virtual")}>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+
+        <label>Program has a cost:</label>
+        <select {...register("hasCost")}>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+
+        <label>Program primarily looks for students who are:</label>
+        <Controller
+          name="race"
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={raceOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={raceOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+              ></Select>
+            );
+          }}
+        />
+
+        <label>Program primarily looks for students who are:</label>
+        <Controller
+          name="ethnicity"
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={ethnicityOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={ethnicityOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+              ></Select>
+            );
+          }}
+        />
+
+        <label>Program primarily looks for students identify as:</label>
+        <Controller
+          name="gender"
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={genderOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={genderOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+              ></Select>
+            );
+          }}
+        />
+
+        <label>
+          Program ONLY accepts students who are First Generation college
+          students:
+        </label>
+        <select {...register("firstgen")}>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+
+        <label>Program ONLY accepts students who are low income:</label>
+        <select {...register("income")}>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+
+        <fieldset {...register("published")}>
+          <input className={styles.checkbox} name="published" type="checkbox" />
           <label>Published</label>
         </fieldset>
 
