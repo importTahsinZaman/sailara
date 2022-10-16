@@ -79,7 +79,7 @@ function CreateNewPost() {
       uid,
       username,
       published: false,
-      content: "# hello world!",
+      content: [],
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       heartCount: 0,

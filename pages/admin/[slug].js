@@ -40,10 +40,8 @@ function PostManager() {
     slug
   );
   const [post] = useDocumentDataOnce(postRef);
-
-  console.log("post= " + post);
-
   console.log(post);
+
   return (
     <main className={styles.container}>
       {post && (
@@ -97,6 +95,24 @@ function PostForm({ defaultValues, postRef, preview }) {
     firstgen,
     income,
   }) => {
+    let attributes = [
+      subject,
+      type,
+      description,
+      duration,
+      link,
+      published,
+      grade,
+      pays,
+      virtual,
+      hasCost,
+      race,
+      ethnicity,
+      gender,
+      firstgen,
+      income,
+    ];
+
     await updateDoc(postRef, {
       content: {
         subject,
@@ -181,12 +197,14 @@ function PostForm({ defaultValues, postRef, preview }) {
     { value: "Other/Multiple", label: "Other/Multiple" },
   ];
 
+  const [checkValid, setCheckValid] = useState(false);
+
   return (
     <form onSubmit={handleSubmit(updatePost)}>
       {preview && <div className="card"></div>}
       <div className={preview ? styles.hidden : styles.controls}>
         <label>Program Subject:</label>
-        <select {...register("subject", { required: true })}>
+        <select {...register("subject", { required: checkValid })}>
           <option value="Activism">Activism</option>
           <option value="Administration">Administration</option>
           <option value="Advocacy">Advocacy</option>
@@ -223,7 +241,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         </select>
 
         <label>Program Type:</label>
-        <select {...register("type", { required: true })}>
+        <select {...register("type", { required: checkValid })}>
           <option value="Summer Program">Summer Program</option>
           <option value="School Year Program">School Year Program</option>
           <option value="1-4 Year Program">1-4 Year Program</option>
@@ -235,7 +253,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program Description:</label>
         <textarea
           {...register("description", {
-            required: true,
+            required: checkValid,
             minLength: 50,
             maxLength: 100,
           })}
@@ -244,19 +262,22 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program Duration/Attendance Requirements:</label>
         <textarea
           {...register("duration", {
-            required: true,
+            required: checkValid,
             minLength: 50,
             maxLength: 100,
           })}
         ></textarea>
 
         <label>Website/Infographic Link:</label>
-        <input type="text" {...register("link", { required: true })}></input>
+        <input
+          type="text"
+          {...register("link", { required: checkValid })}
+        ></input>
 
         <label>Student Grade (rising grade if summer program):</label>
         <Controller
           name="grade"
-          rules={{ required: true }}
+          rules={{ required: checkValid }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -272,19 +293,19 @@ function PostForm({ defaultValues, postRef, preview }) {
         />
 
         <label>Students will be payed:</label>
-        <select {...register("pays", { required: true })}>
+        <select {...register("pays", { required: checkValid })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program is virtual:</label>
-        <select {...register("virtual", { required: true })}>
+        <select {...register("virtual", { required: checkValid })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program has a cost:</label>
-        <select {...register("hasCost", { required: true })}>
+        <select {...register("hasCost", { required: checkValid })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
@@ -292,7 +313,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students who are:</label>
         <Controller
           name="race"
-          rules={{ required: true }}
+          rules={{ required: checkValid }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -302,7 +323,6 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={raceOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={defaultValues["race"]}
               ></Select>
             );
           }}
@@ -311,7 +331,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students who are:</label>
         <Controller
           name="ethnicity"
-          rules={{ required: true }}
+          rules={{ required: checkValid }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -329,7 +349,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students identify as:</label>
         <Controller
           name="gender"
-          rules={{ required: true }}
+          rules={{ required: checkValid }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -348,13 +368,13 @@ function PostForm({ defaultValues, postRef, preview }) {
           Program ONLY accepts students who are First Generation college
           students:
         </label>
-        <select {...register("firstgen", { required: true })}>
+        <select {...register("firstgen", { required: checkValid })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program ONLY accepts students who are low income:</label>
-        <select {...register("income", { required: true })}>
+        <select {...register("income", { required: checkValid })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
@@ -364,6 +384,7 @@ function PostForm({ defaultValues, postRef, preview }) {
             className={styles.checkbox}
             name="published"
             type="checkbox"
+            onClick={() => setCheckValid(!checkValid)}
             disabled={!isDirty || !isValid}
           />
           <label>Published</label>
