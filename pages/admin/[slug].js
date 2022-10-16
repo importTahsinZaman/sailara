@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { useDocumentDataOnce } from "../../lib/reactFirebaseHooks.ts";
 import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -32,7 +32,6 @@ function PostManager() {
   const router = useRouter();
   const { slug } = router.query;
 
-  // const postRef = firestore.collection('users').doc(auth.currentUser.uid).collection('posts').doc(slug);
   const postRef = doc(
     getFirestore(),
     "users",
@@ -42,6 +41,9 @@ function PostManager() {
   );
   const [post] = useDocumentDataOnce(postRef);
 
+  console.log("post= " + post);
+
+  console.log(post);
   return (
     <main className={styles.container}>
       {post && (
@@ -51,9 +53,9 @@ function PostManager() {
             <p>ID: {post.slug}</p>
             <PostForm
               postRef={postRef}
-              defaultValues={post}
+              defaultValues={post["content"]}
               preview={preview}
-            />{" "}
+            />
           </section>
 
           <aside>
@@ -182,10 +184,9 @@ function PostForm({ defaultValues, postRef, preview }) {
   return (
     <form onSubmit={handleSubmit(updatePost)}>
       {preview && <div className="card"></div>}
-
       <div className={preview ? styles.hidden : styles.controls}>
         <label>Program Subject:</label>
-        <select {...register("subject")}>
+        <select {...register("subject", { required: true })}>
           <option value="Activism">Activism</option>
           <option value="Administration">Administration</option>
           <option value="Advocacy">Advocacy</option>
@@ -222,7 +223,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         </select>
 
         <label>Program Type:</label>
-        <select {...register("type")}>
+        <select {...register("type", { required: true })}>
           <option value="Summer Program">Summer Program</option>
           <option value="School Year Program">School Year Program</option>
           <option value="1-4 Year Program">1-4 Year Program</option>
@@ -232,17 +233,30 @@ function PostForm({ defaultValues, postRef, preview }) {
         </select>
 
         <label>Program Description:</label>
-        <textarea {...register("description")}></textarea>
+        <textarea
+          {...register("description", {
+            required: true,
+            minLength: 50,
+            maxLength: 100,
+          })}
+        ></textarea>
 
         <label>Program Duration/Attendance Requirements:</label>
-        <textarea {...register("duration")}></textarea>
+        <textarea
+          {...register("duration", {
+            required: true,
+            minLength: 50,
+            maxLength: 100,
+          })}
+        ></textarea>
 
         <label>Website/Infographic Link:</label>
-        <input type="text" {...register("link")}></input>
+        <input type="text" {...register("link", { required: true })}></input>
 
         <label>Student Grade (rising grade if summer program):</label>
         <Controller
           name="grade"
+          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -258,19 +272,19 @@ function PostForm({ defaultValues, postRef, preview }) {
         />
 
         <label>Students will be payed:</label>
-        <select {...register("pays")}>
+        <select {...register("pays", { required: true })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program is virtual:</label>
-        <select {...register("virtual")}>
+        <select {...register("virtual", { required: true })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program has a cost:</label>
-        <select {...register("hasCost")}>
+        <select {...register("hasCost", { required: true })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
@@ -278,6 +292,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students who are:</label>
         <Controller
           name="race"
+          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -287,6 +302,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={raceOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={defaultValues["race"]}
               ></Select>
             );
           }}
@@ -295,6 +311,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students who are:</label>
         <Controller
           name="ethnicity"
+          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -312,6 +329,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         <label>Program primarily looks for students identify as:</label>
         <Controller
           name="gender"
+          rules={{ required: true }}
           control={control}
           render={({ field: { onChange, value } }) => {
             return (
@@ -330,27 +348,28 @@ function PostForm({ defaultValues, postRef, preview }) {
           Program ONLY accepts students who are First Generation college
           students:
         </label>
-        <select {...register("firstgen")}>
+        <select {...register("firstgen", { required: true })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <label>Program ONLY accepts students who are low income:</label>
-        <select {...register("income")}>
+        <select {...register("income", { required: true })}>
           <option value="True">True</option>
           <option value="False">False</option>
         </select>
 
         <fieldset {...register("published")}>
-          <input className={styles.checkbox} name="published" type="checkbox" />
+          <input
+            className={styles.checkbox}
+            name="published"
+            type="checkbox"
+            disabled={!isDirty || !isValid}
+          />
           <label>Published</label>
         </fieldset>
 
-        <button
-          type="submit"
-          className="btn-green"
-          disabled={!isDirty || !isValid}
-        >
+        <button type="submit" className="btn-green">
           Save Changes
         </button>
       </div>

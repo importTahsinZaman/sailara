@@ -16,7 +16,7 @@ import {
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useCollection } from "../../lib/reactFirebaseHooks.ts";
 import kebabCase from "lodash.kebabcase";
 import toast from "react-hot-toast";
 
