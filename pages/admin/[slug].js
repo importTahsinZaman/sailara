@@ -415,27 +415,38 @@ function PostForm({ defaultValues, postRef, preview }) {
           <p className="text-danger">Description Is Required To Publish</p>
         )}
         {checkValid && errors.description?.type === "minLength" && (
-          <p className="text-danger">Description Is Too Short</p>
+          <p className="text-danger">Description Is Too Short to publish</p>
         )}
         {checkValid && errors.description?.type === "maxLength" && (
-          <p className="text-danger">Description Is Too Long</p>
+          <p className="text-danger">Description Is Too Long to publish</p>
         )}
 
         {checkValid && errors.duration?.type === "required" && (
           <p className="text-danger">Duration Is Required To Publish</p>
         )}
         {checkValid && errors.duration?.type === "minLength" && (
-          <p className="text-danger">Duration Is Too Short</p>
+          <p className="text-danger">Duration Is Too Short to publish</p>
         )}
         {checkValid && errors.duration?.type === "maxLength" && (
-          <p className="text-danger">Duration Is Too Long</p>
+          <p className="text-danger">Duration Is Too Long to publish</p>
         )}
-
         {checkValid && errors.link?.type === "required" && (
           <p className="text-danger">Link Is Required To Publish</p>
         )}
         {checkValid && errors.link?.type === "pattern" && (
-          <p className="text-danger">Link must be valid url</p>
+          <p className="text-danger">Link must be valid url to publish</p>
+        )}
+        {checkValid && errors.grade?.type === "required" && (
+          <p className="text-danger">Grade is required to publish</p>
+        )}
+        {checkValid && errors.race?.type === "required" && (
+          <p className="text-danger">Race is required to publish</p>
+        )}
+        {checkValid && errors.ethnicity?.type === "required" && (
+          <p className="text-danger">Ethnicity is required to publish</p>
+        )}
+        {checkValid && errors.gender?.type === "required" && (
+          <p className="text-danger">Gender is required to publish</p>
         )}
 
         <button type="submit" className="btn-green">
