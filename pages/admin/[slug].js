@@ -1,6 +1,6 @@
 import styles from "../../styles/Admin.module.css";
 import AuthCheck from "../../components/AuthCheck";
-import { firestore, auth } from "../../lib/firebase";
+import { auth } from "../../lib/firebase";
 import {
   serverTimestamp,
   doc,
@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 
 import { useDocumentDataOnce } from "../../lib/reactFirebaseHooks.ts";
 import { useForm, Controller } from "react-hook-form";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import Select from "react-select";
 
@@ -40,7 +39,6 @@ function PostManager() {
     slug
   );
   const [post] = useDocumentDataOnce(postRef);
-  console.log(post);
 
   return (
     <main className={styles.container}>
@@ -70,11 +68,17 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-  const { register, errors, handleSubmit, formState, reset, watch, control } =
-    useForm({
-      defaultValues,
-      mode: "onChange",
-    });
+  const {
+    register,
+    handleSubmit,
+    formState,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm({
+    defaultValues,
+    mode: "onChange",
+  });
 
   const { isValid, isDirty } = formState;
 
@@ -95,23 +99,24 @@ function PostForm({ defaultValues, postRef, preview }) {
     firstgen,
     income,
   }) => {
-    let attributes = [
-      subject,
-      type,
-      description,
-      duration,
-      link,
-      published,
-      grade,
-      pays,
-      virtual,
-      hasCost,
-      race,
-      ethnicity,
-      gender,
-      firstgen,
-      income,
-    ];
+    if (checkValid) {
+      published = true;
+    } else {
+      published = false;
+    }
+
+    if (grade == undefined) {
+      grade = [];
+    }
+    if (race == undefined) {
+      race = [];
+    }
+    if (ethnicity == undefined) {
+      ethnicity = [];
+    }
+    if (gender == undefined) {
+      gender = [];
+    }
 
     await updateDoc(postRef, {
       content: {
@@ -197,7 +202,15 @@ function PostForm({ defaultValues, postRef, preview }) {
     { value: "Other/Multiple", label: "Other/Multiple" },
   ];
 
-  const [checkValid, setCheckValid] = useState(false);
+  const [checkValid, setCheckValid] = useState(defaultValues["published"]);
+
+  const get_select_defaults = (field) => {
+    var defaults = [];
+    defaultValues[field].forEach((value) => {
+      defaults.push({ label: value, value: value });
+    });
+    return defaults;
+  };
 
   return (
     <form onSubmit={handleSubmit(updatePost)}>
@@ -254,8 +267,8 @@ function PostForm({ defaultValues, postRef, preview }) {
         <textarea
           {...register("description", {
             required: checkValid,
-            minLength: 50,
-            maxLength: 100,
+            minLength: checkValid ? 50 : 0,
+            maxLength: checkValid ? 100 : 10000000,
           })}
         ></textarea>
 
@@ -263,15 +276,19 @@ function PostForm({ defaultValues, postRef, preview }) {
         <textarea
           {...register("duration", {
             required: checkValid,
-            minLength: 50,
-            maxLength: 100,
+            minLength: checkValid ? 50 : 0,
+            maxLength: checkValid ? 100 : 10000000,
           })}
         ></textarea>
 
         <label>Website/Infographic Link:</label>
         <input
           type="text"
-          {...register("link", { required: checkValid })}
+          {...register("link", {
+            required: checkValid,
+            pattern:
+              /((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi,
+          })}
         ></input>
 
         <label>Student Grade (rising grade if summer program):</label>
@@ -287,6 +304,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={gradeOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={get_select_defaults("grade")}
               ></Select>
             );
           }}
@@ -323,6 +341,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={raceOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={get_select_defaults("race")}
               ></Select>
             );
           }}
@@ -341,12 +360,13 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={ethnicityOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={get_select_defaults("ethnicity")}
               ></Select>
             );
           }}
         />
 
-        <label>Program primarily looks for students identify as:</label>
+        <label>Program primarily looks for students who identify as:</label>
         <Controller
           name="gender"
           rules={{ required: checkValid }}
@@ -359,6 +379,7 @@ function PostForm({ defaultValues, postRef, preview }) {
                 isMulti
                 value={genderOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={get_select_defaults("gender")}
               ></Select>
             );
           }}
@@ -385,10 +406,37 @@ function PostForm({ defaultValues, postRef, preview }) {
             name="published"
             type="checkbox"
             onClick={() => setCheckValid(!checkValid)}
-            disabled={!isDirty || !isValid}
+            // disabled={!isDirty || !isValid}
           />
           <label>Published</label>
         </fieldset>
+
+        {checkValid && errors.description?.type === "required" && (
+          <p className="text-danger">Description Is Required To Publish</p>
+        )}
+        {checkValid && errors.description?.type === "minLength" && (
+          <p className="text-danger">Description Is Too Short</p>
+        )}
+        {checkValid && errors.description?.type === "maxLength" && (
+          <p className="text-danger">Description Is Too Long</p>
+        )}
+
+        {checkValid && errors.duration?.type === "required" && (
+          <p className="text-danger">Duration Is Required To Publish</p>
+        )}
+        {checkValid && errors.duration?.type === "minLength" && (
+          <p className="text-danger">Duration Is Too Short</p>
+        )}
+        {checkValid && errors.duration?.type === "maxLength" && (
+          <p className="text-danger">Duration Is Too Long</p>
+        )}
+
+        {checkValid && errors.link?.type === "required" && (
+          <p className="text-danger">Link Is Required To Publish</p>
+        )}
+        {checkValid && errors.link?.type === "pattern" && (
+          <p className="text-danger">Link must be valid url</p>
+        )}
 
         <button type="submit" className="btn-green">
           Save Changes
