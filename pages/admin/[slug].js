@@ -49,7 +49,7 @@ function PostManager() {
             <p>ID: {post.slug}</p>
             <PostForm
               postRef={postRef}
-              defaultValues={post["content"]}
+              defaultValues={post}
               preview={preview}
             />
           </section>
@@ -67,7 +67,10 @@ function PostManager() {
   );
 }
 
-function PostForm({ defaultValues, postRef, preview }) {
+function PostForm({ postRef, defaultValues, preview }) {
+  const [checkValid, setCheckValid] = useState(defaultValues["published"]);
+  defaultValues = defaultValues["content"];
+
   const {
     register,
     handleSubmit,
@@ -79,8 +82,6 @@ function PostForm({ defaultValues, postRef, preview }) {
     defaultValues,
     mode: "onChange",
   });
-
-  const { isValid, isDirty } = formState;
 
   const updatePost = async ({
     subject,
@@ -202,14 +203,19 @@ function PostForm({ defaultValues, postRef, preview }) {
     { value: "Other/Multiple", label: "Other/Multiple" },
   ];
 
-  const [checkValid, setCheckValid] = useState(defaultValues["published"]);
+  //To check for form validity if user clicked the "publish" button
 
   const get_select_defaults = (field) => {
-    var defaults = [];
-    defaultValues[field].forEach((value) => {
-      defaults.push({ label: value, value: value });
-    });
-    return defaults;
+    //get default values for custom react-select library components
+    try {
+      var defaults = [];
+      defaultValues[field].forEach((value) => {
+        defaults.push({ label: value, value: value });
+      });
+      return defaults;
+    } catch (err) {
+      console.log("Err with getting select defaults OR new post " + err);
+    }
   };
 
   return (
@@ -407,10 +413,12 @@ function PostForm({ defaultValues, postRef, preview }) {
             type="checkbox"
             onClick={() => setCheckValid(!checkValid)}
             // disabled={!isDirty || !isValid}
+            defaultChecked={checkValid ? true : false}
           />
           <label>Published</label>
         </fieldset>
 
+        {/* Error messages for when the user has selected "publish" */}
         {checkValid && errors.description?.type === "required" && (
           <p className="text-danger">Description Is Required To Publish</p>
         )}
