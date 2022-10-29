@@ -11,9 +11,10 @@ export default function PostFeed({ posts, admin }) {
 function PostItem({ post, admin = false }) {
   return (
     <div className="card">
-      <strong>By @{post.username}</strong>
-
-      <h2>{post.title}</h2>
+      <h1>{post.title}</h1>
+      <p>{post.content.subject + " - " + post.content.type}</p>
+      <p>{post.content.description}</p>
+      <p>{post.content.duration}</p>
 
       {/* If admin view, show extra controls for user */}
       {admin && (

@@ -274,7 +274,7 @@ function PostForm({ postRef, defaultValues, preview }) {
           {...register("description", {
             required: checkValid,
             minLength: checkValid ? 50 : 0,
-            maxLength: checkValid ? 100 : 10000000,
+            maxLength: checkValid ? 1000 : 10000000,
           })}
         ></textarea>
 
@@ -282,7 +282,7 @@ function PostForm({ postRef, defaultValues, preview }) {
         <textarea
           {...register("duration", {
             required: checkValid,
-            minLength: checkValid ? 50 : 0,
+            minLength: checkValid ? 10 : 0,
             maxLength: checkValid ? 100 : 10000000,
           })}
         ></textarea>
