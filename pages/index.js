@@ -1,7 +1,7 @@
 import PostFeed from "../components/PostFeed";
 import Metatags from "../components/Metatags";
 import Loader from "../components/Loader";
-import { firestore, postToJSON, getIt } from "../lib/firebase";
+import { postToJSON } from "../lib/firebase";
 import {
   Timestamp,
   query,
@@ -9,10 +9,14 @@ import {
   orderBy,
   limit,
   collectionGroup,
+  collection,
   getDocs,
   startAfter,
   getFirestore,
+  addDoc,
+  onSnapshot,
 } from "firebase/firestore";
+import { auth } from "../lib/firebase";
 
 import { useState } from "react";
 
@@ -82,6 +86,43 @@ export default function Home(props) {
     }
   };
 
+  async function checkout() {
+    const ref = collection(
+      getFirestore(),
+      "users",
+      auth.currentUser.uid,
+      "checkout_sessions"
+    );
+
+    const payload = {
+      price: "price_1LeMqhGRi1AVJ1EusAVlw3Fg",
+      success_url: window.location.origin,
+      cancel_url: window.location.origin,
+    };
+
+    var docRef = await addDoc(ref, payload);
+
+    const snapshot = onSnapshot(docRef, (doc) => {
+      const { error, url } = doc.data();
+      if (error) {
+        // Show an error to your customer and
+        // inspect your Cloud Function logs in the Firebase console.
+        alert(`An error occured: ${error.message}`);
+      }
+      if (url) {
+        // We have a Stripe Checkout URL, let's redirect.
+        window.location.assign(url);
+      }
+    });
+  }
+
+  async function test() {
+    await auth.currentUser.getIdToken(true);
+    const decodedToken = await auth.currentUser?.getIdTokenResult();
+    const temp = decodedToken.claims.stripeRole == "educator";
+    return temp;
+  }
+
   return (
     <main>
       <Metatags
@@ -103,6 +144,12 @@ export default function Home(props) {
       <Loader show={loading} />
 
       {postsEnd && "You have reached the end!"}
+      <button onClick={checkout}>upgrade</button>
+      <button
+        onClick={() => {
+          console.log(test());
+        }}
+      ></button>
     </main>
   );
 }
