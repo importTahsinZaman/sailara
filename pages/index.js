@@ -18,7 +18,8 @@ import {
 } from "firebase/firestore";
 import { auth } from "../lib/firebase";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../lib/context";
 
 // Max post to query per page
 const LIMIT = 10;
@@ -49,6 +50,8 @@ export default function Home(props) {
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
+
+  const { premium } = useContext(UserContext);
 
   // Get next page in pagination query
   const getMorePosts = async () => {
@@ -116,13 +119,6 @@ export default function Home(props) {
     });
   }
 
-  async function test() {
-    await auth.currentUser.getIdToken(true);
-    const decodedToken = await auth.currentUser?.getIdTokenResult();
-    const temp = decodedToken.claims.stripeRole == "educator";
-    return temp;
-  }
-
   return (
     <main>
       <Metatags
@@ -147,7 +143,7 @@ export default function Home(props) {
       <button onClick={checkout}>upgrade</button>
       <button
         onClick={() => {
-          console.log(test());
+          console.log(premium);
         }}
       ></button>
     </main>
