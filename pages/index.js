@@ -18,8 +18,7 @@ import {
 } from "firebase/firestore";
 import { auth } from "../lib/firebase";
 
-import { useState, useContext } from "react";
-import { UserContext } from "../lib/context";
+import { useState } from "react";
 
 // Max post to query per page
 const LIMIT = 10;
@@ -50,8 +49,6 @@ export default function Home(props) {
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
-
-  const { premium } = useContext(UserContext);
 
   // Get next page in pagination query
   const getMorePosts = async () => {
@@ -141,11 +138,6 @@ export default function Home(props) {
 
       {postsEnd && "You have reached the end!"}
       <button onClick={checkout}>upgrade</button>
-      <button
-        onClick={() => {
-          console.log(premium);
-        }}
-      ></button>
     </main>
   );
 }

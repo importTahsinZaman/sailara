@@ -1,5 +1,6 @@
 import styles from "../../styles/Admin.module.css";
 import AuthCheck from "../../components/AuthCheck";
+import PremiumCheck from "../../components/PremiumCheck";
 import { auth } from "../../lib/firebase";
 import {
   serverTimestamp,
@@ -20,7 +21,9 @@ import Select from "react-select";
 export default function AdminPostEdit(props) {
   return (
     <AuthCheck>
-      <PostManager />
+      <PremiumCheck>
+        <PostManager />
+      </PremiumCheck>
     </AuthCheck>
   );
 }

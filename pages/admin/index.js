@@ -1,5 +1,6 @@
 import styles from "../../styles/Admin.module.css";
 import AuthCheck from "../../components/AuthCheck";
+import PremiumCheck from "../../components/PremiumCheck";
 import PostFeed from "../../components/PostFeed";
 import { UserContext } from "../../lib/context";
 import { firestore, auth } from "../../lib/firebase";
@@ -24,8 +25,10 @@ export default function AdminPostsPage(props) {
   return (
     <main>
       <AuthCheck>
-        <PostList />
-        <CreateNewPost />
+        <PremiumCheck>
+          <PostList />
+          <CreateNewPost />
+        </PremiumCheck>
       </AuthCheck>
     </main>
   );
