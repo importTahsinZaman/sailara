@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { createEducatorCheckoutSession } from "../lib/stripe.js";
+import { CreateEducatorCheckoutSession } from "../lib/stripe.js";
 
-export default function upgrade() {
+export default function Upgrade() {
   return (
     <>
-      <Link href="/upgrade">
-        <button className="btn-blue">Upgrade</button>
-      </Link>
+      <button className="btn-blue" onClick={CreateEducatorCheckoutSession}>
+        Upgrade
+      </button>
     </>
   );
 }
