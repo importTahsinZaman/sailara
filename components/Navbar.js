@@ -25,14 +25,33 @@ export default function Navbar() {
           </Link>
         </li>
 
-        {/* user is signed-in and has username */}
-        {username && (
+        {/* user is signed-in and has username and is premium*/}
+        {username && premium && (
           <>
             <li className="push-left">
               <button onClick={signOutNow}>Sign Out</button>
             </li>
             <li>
               <Link href="/admin">
+                <button className="btn-blue">Manage Posts</button>
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${username}`}>
+                <img src={user?.photoURL || "/hacker.png"} />
+              </Link>
+            </li>
+          </>
+        )}
+
+        {/* user is signed-in and has username but is not premium*/}
+        {username && !premium && (
+          <>
+            <li className="push-left">
+              <button onClick={signOutNow}>Sign Out</button>
+            </li>
+            <li>
+              <Link href="/upgrade">
                 <button className="btn-blue">Write Posts</button>
               </Link>
             </li>
