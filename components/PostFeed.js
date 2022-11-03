@@ -32,6 +32,7 @@ function PostItem({ post, admin = false }) {
           )}
         </>
       )}
+
       <footer>
         <span className="push-left">💗 {post.heartCount || 0} Hearts</span>
       </footer>
