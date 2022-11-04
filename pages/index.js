@@ -20,15 +20,12 @@ import { auth } from "../lib/firebase";
 
 import { useState } from "react";
 
+import Filter from "../components/Filter.js";
+
 // Max post to query per page
 const LIMIT = 10;
 
 export async function getServerSideProps(context) {
-  // const postsQuery = firestore
-  //   .collectionGroup('posts')
-  //   .where('published', '==', true)
-  //   .orderBy('createdAt', 'desc')
-  //   .limit(LIMIT);
   const ref = collectionGroup(getFirestore(), "posts");
   const postsQuery = query(
     ref,
@@ -60,13 +57,6 @@ export default function Home(props) {
         ? Timestamp.fromMillis(last.createdAt)
         : last.createdAt;
 
-    // const query = firestore
-    //   .collectionGroup('posts')
-    //   .where('published', '==', true)
-    //   .orderBy('createdAt', 'desc')
-    //   .startAfter(cursor)
-    //   .limit(LIMIT);
-
     const ref = collectionGroup(getFirestore(), "posts");
     const postsQuery = query(
       ref,
@@ -88,15 +78,13 @@ export default function Home(props) {
 
   return (
     <main>
-      <Metatags
-        title="Home Page"
-        description="Get the latest posts on our site"
-      />
+      <Metatags title="Home Page" description="development" />
 
       <div className="card card-info">
         <h2>WIP Sailara</h2>
         <p>Welcome!</p>
       </div>
+      <Filter></Filter>
 
       <PostFeed posts={posts} />
 

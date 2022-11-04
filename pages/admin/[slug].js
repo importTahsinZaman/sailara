@@ -339,25 +339,6 @@ function PostForm({ postRef, defaultValues, preview }) {
 
         <label>Program primarily looks for students who are:</label>
         <Controller
-          name="race"
-          rules={{ required: checkValid }}
-          control={control}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Select
-                options={raceOptions}
-                closeMenuOnSelect={false}
-                isMulti
-                value={raceOptions.find((c) => c.value === value)}
-                onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("race")}
-              ></Select>
-            );
-          }}
-        />
-
-        <label>Program primarily looks for students who are:</label>
-        <Controller
           name="ethnicity"
           rules={{ required: checkValid }}
           control={control}
@@ -370,6 +351,25 @@ function PostForm({ postRef, defaultValues, preview }) {
                 value={ethnicityOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
                 defaultValue={get_select_defaults("ethnicity")}
+              ></Select>
+            );
+          }}
+        />
+
+        <label>Program primarily looks for students who are:</label>
+        <Controller
+          name="race"
+          rules={{ required: checkValid }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={raceOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={raceOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                defaultValue={get_select_defaults("race")}
               ></Select>
             );
           }}
