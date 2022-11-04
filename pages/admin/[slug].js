@@ -72,7 +72,6 @@ function PostManager() {
 
 function PostForm({ postRef, defaultValues, preview }) {
   const [checkValid, setCheckValid] = useState(defaultValues["published"]);
-  defaultValues = defaultValues["content"];
 
   const {
     register,
@@ -123,22 +122,20 @@ function PostForm({ postRef, defaultValues, preview }) {
     }
 
     await updateDoc(postRef, {
-      content: {
-        subject,
-        type,
-        description,
-        duration,
-        link,
-        grade,
-        pays,
-        virtual,
-        hasCost,
-        race,
-        ethnicity,
-        gender,
-        firstgen,
-        income,
-      },
+      subject,
+      type,
+      description,
+      duration,
+      link,
+      grade,
+      pays,
+      virtual,
+      hasCost,
+      race,
+      ethnicity,
+      gender,
+      firstgen,
+      income,
       published,
       updatedAt: serverTimestamp(),
     });

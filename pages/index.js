@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { auth } from "../lib/firebase";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Filter from "../components/Filter.js";
 
@@ -46,6 +46,8 @@ export default function Home(props) {
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
+
+  const [filters, setFilters] = useState([]);
 
   // Get next page in pagination query
   const getMorePosts = async () => {
@@ -76,6 +78,26 @@ export default function Home(props) {
     }
   };
 
+  const getFilteredPosts = async () => {
+    const ref = collectionGroup(getFirestore(), "posts");
+    const postsQuery = query(
+      ref,
+      where("published", "==", true),
+      orderBy("createdAt", "desc"),
+      limit(LIMIT)
+    );
+
+    const posts = (await getDocs(postsQuery)).docs.map(postToJSON);
+
+    return {
+      props: { posts }, // will be passed to the page component as props
+    };
+  };
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
+
   return (
     <main>
       <Metatags title="Home Page" description="development" />
@@ -84,7 +106,11 @@ export default function Home(props) {
         <h2>WIP Sailara</h2>
         <p>Welcome!</p>
       </div>
-      <Filter></Filter>
+      <Filter
+        onSubmit={(data) => {
+          setFilters(data);
+        }}
+      ></Filter>
 
       <PostFeed posts={posts} />
 

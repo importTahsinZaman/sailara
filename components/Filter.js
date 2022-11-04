@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 
-export default function Filter() {
+export default function Filter({ onSubmit }) {
   const {
     register,
     handleSubmit,
@@ -11,7 +11,6 @@ export default function Filter() {
     formState: { errors },
     control,
   } = useForm({ mode: "onChange" });
-  const onSubmit = (data) => console.log(data);
 
   const subjectOptions = [
     { value: "Activism", label: "Activism" },
