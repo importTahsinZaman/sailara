@@ -165,10 +165,10 @@ function PostForm({ postRef, defaultValues, preview }) {
   };
 
   const gradeOptions = [
-    { value: "9", label: "9" },
-    { value: "10", label: "10" },
-    { value: "11", label: "11" },
-    { value: "12", label: "12" },
+    { value: 9, label: "9" },
+    { value: 10, label: "10" },
+    { value: 11, label: "11" },
+    { value: 12, label: "12" },
   ];
 
   const raceOptions = [
@@ -321,20 +321,20 @@ function PostForm({ postRef, defaultValues, preview }) {
 
         <label>Students will be payed:</label>
         <select {...register("pays", { required: checkValid })}>
-          <option value="True">True</option>
-          <option value="False">False</option>
+          <option value={true}>True</option>
+          <option value={false}>False</option>
         </select>
 
         <label>Program is virtual:</label>
         <select {...register("virtual", { required: checkValid })}>
-          <option value="True">True</option>
-          <option value="False">False</option>
+          <option value={true}>True</option>
+          <option value={false}>False</option>
         </select>
 
         <label>Program has a cost:</label>
         <select {...register("hasCost", { required: checkValid })}>
-          <option value="True">True</option>
-          <option value="False">False</option>
+          <option value={true}>True</option>
+          <option value={false}>False</option>
         </select>
 
         <label>Program primarily looks for students who are:</label>
@@ -399,14 +399,14 @@ function PostForm({ postRef, defaultValues, preview }) {
           students:
         </label>
         <select {...register("firstgen", { required: checkValid })}>
-          <option value="True">True</option>
-          <option value="False">False</option>
+          <option value={true}>True</option>
+          <option value={false}>False</option>
         </select>
 
         <label>Program ONLY accepts students who are low income:</label>
         <select {...register("income", { required: checkValid })}>
-          <option value="True">True</option>
-          <option value="False">False</option>
+          <option value={true}>True</option>
+          <option value={false}>False</option>
         </select>
 
         <fieldset {...register("published")}>
