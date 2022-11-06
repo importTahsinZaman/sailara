@@ -12,6 +12,7 @@ import {
   getFirestore,
   setDoc,
   doc,
+  getDocs,
 } from "firebase/firestore";
 
 import { useContext, useState } from "react";
@@ -82,7 +83,6 @@ function CreateNewPost() {
       uid,
       username,
       published: false,
-      content: [],
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       heartCount: 0,
@@ -96,18 +96,71 @@ function CreateNewPost() {
     router.push(`/admin/${slug}`);
   };
 
+  // const importPosts = async () => {
+  //   // OLD FUNCTION USED TO GRAB PROGRAMS
+  //   function toBool(string) {
+  //     return string.toLowerCase() === "true";
+  //   }
+
+  //   const programs = await getDocs(collection(getFirestore(), "programs"));
+
+  //   programs.forEach(async (program) => {
+  //     let programData = program.data();
+  //     programData.grade = programData.grade.map((e) => Number(e));
+  //     programData.firstgen = toBool(programData.firstgen);
+  //     programData.hasCost = toBool(programData.hasCost);
+  //     programData.income = toBool(programData.income);
+  //     programData.pays = toBool(programData.pays);
+  //     programData.virtual = toBool(programData.virtual);
+
+  //     const slug = encodeURI(kebabCase(programData.name));
+
+  //     const uid = auth.currentUser.uid;
+  //     const ref = doc(getFirestore(), "users", uid, "posts", slug);
+
+  //     // Tip: give all fields a default value here
+  //     const data = {
+  //       title: programData.name,
+  //       slug,
+  //       uid,
+  //       username,
+  //       published: true,
+  //       createdAt: serverTimestamp(),
+  //       updatedAt: serverTimestamp(),
+  //       heartCount: 0,
+  //       subject: programData.subject,
+  //       type: programData.type,
+  //       description: programData.description,
+  //       duration: programData.duration,
+  //       link: programData.link,
+  //       grade: programData.grade,
+  //       pays: programData.pays,
+  //       virtual: programData.virtual,
+  //       hasCost: programData.hasCost,
+  //       race: programData.race,
+  //       ethnicity: programData.ethnicity,
+  //       gender: programData.gender,
+  //       firstgen: programData.firstgen,
+  //       income: programData.income,
+  //     };
+  //     await setDoc(ref, data);
+  //   });
+  // };
+
   return (
-    <form onSubmit={createPost}>
-      <h2>Create New Post:</h2>
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Post Title"
-        className={styles.input}
-      />
-      <button type="submit" disabled={!isValid} className="btn-green">
-        Create
-      </button>
-    </form>
+    <>
+      <form onSubmit={createPost}>
+        <h2>Create New Post:</h2>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Post Title"
+          className={styles.input}
+        />
+        <button type="submit" disabled={!isValid} className="btn-green">
+          Create
+        </button>
+      </form>
+    </>
   );
 }
