@@ -20,7 +20,7 @@ import { auth } from "../lib/firebase";
 
 import { useState, useEffect } from "react";
 
-import Filter from "../components/Filter.js";
+import { Filter, filterPrograms } from "../components/Filter.js";
 
 // Max post to query per page
 const LIMIT = 10;
@@ -43,6 +43,7 @@ export async function getServerSideProps(context) {
 
 export default function Home(props) {
   const [posts, setPosts] = useState(props.posts);
+  const [filteredPosts, setFilteredPosts] = useState(posts);
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
@@ -78,25 +79,10 @@ export default function Home(props) {
     }
   };
 
-  const getFilteredPosts = async () => {
-    const ref = collectionGroup(getFirestore(), "posts");
-    const postsQuery = query(
-      ref,
-      where("published", "==", true),
-      orderBy("createdAt", "desc"),
-      limit(LIMIT)
-    );
-
-    const posts = (await getDocs(postsQuery)).docs.map(postToJSON);
-
-    return {
-      props: { posts }, // will be passed to the page component as props
-    };
-  };
-
   useEffect(() => {
-    console.log(filters);
-  }, [filters]);
+    console.log(JSON.stringify(filters));
+    setFilteredPosts(filterPrograms(posts, filters));
+  }, [posts, filters]);
 
   return (
     <main>
@@ -112,7 +98,7 @@ export default function Home(props) {
         }}
       ></Filter>
 
-      <PostFeed posts={posts} />
+      <PostFeed posts={filteredPosts} />
 
       {!loading && !postsEnd && (
         <button onClick={getMorePosts}>Load more</button>

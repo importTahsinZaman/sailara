@@ -1,9 +1,8 @@
 import styles from "../styles/Admin.module.css";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 
-export default function Filter({ onSubmit }) {
+export function Filter({ onSubmit }) {
   const {
     register,
     handleSubmit,
@@ -86,7 +85,7 @@ export default function Filter({ onSubmit }) {
                 isMulti
                 value={subjectOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("grade")}
+                // defaultValue={get_select_defaults("grade")}
               ></Select>
             );
           }}
@@ -105,7 +104,7 @@ export default function Filter({ onSubmit }) {
                 isMulti
                 value={typeOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("grade")}
+                // defaultValue={get_select_defaults("grade")}
               ></Select>
             );
           }}
@@ -113,13 +112,13 @@ export default function Filter({ onSubmit }) {
 
         <label>Grade:</label>
         <select {...register("grade")}>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
+          <option value={9}>9</option>
+          <option value={10}>10</option>
+          <option value={11}>11</option>
+          <option value={12}>12</option>
         </select>
 
-        <label>I identify as (ethnicity):</label>
+        {/* <label>I identify as (ethnicity):</label>
         <select {...register("ethnicity")}>
           <option value="Not of Hispanic, Latino/a/x, or Spanish origin">
             Not of Hispanic, Latino/a/x, or Spanish origin
@@ -130,9 +129,9 @@ export default function Filter({ onSubmit }) {
           <option value="Puerto Rican">Puerto Rican</option>
           <option value="Cuban">Cuban</option>
           <option value="Other">Other</option>
-        </select>
+        </select> */}
 
-        <label>I identify as (race):</label>
+        {/* <label>I identify as (race):</label>
         <select {...register("race")}>
           <option value="American Indian or Alaskan Native">
             American Indian or Alaskan Native
@@ -146,16 +145,16 @@ export default function Filter({ onSubmit }) {
           </option>
           <option value="White">White</option>
           <option value="Other">Other</option>
-        </select>
+        </select> */}
 
-        <label>I identify as (gender):</label>
+        {/* <label>I identify as (gender):</label>
         <select {...register("gender")}>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other/Multiple">Other/Multiple</option>
-        </select>
+        </select> */}
 
-        <label>I am a first generation college student:</label>
+        {/* <label>I am a first generation college student:</label>
         <fieldset>
           <input
             {...register("firstgen")}
@@ -163,9 +162,9 @@ export default function Filter({ onSubmit }) {
             type="checkbox"
           />
           <label>firstgen</label>
-        </fieldset>
+        </fieldset> */}
 
-        <label>I am low income:</label>
+        {/* <label>I am low income:</label>
         <fieldset>
           <input
             {...register("income")}
@@ -173,36 +172,40 @@ export default function Filter({ onSubmit }) {
             type="checkbox"
           />
           <label>low income</label>
-        </fieldset>
+        </fieldset> */}
 
-        <label>Pays:</label>
         <fieldset>
           <input
             {...register("pays")}
             className={styles.checkbox}
             type="checkbox"
           />
-          <label>Pays:</label>
+          <label>
+            Pays: (optional, if not selected will show all, if selected will
+            show just those that pay)
+          </label>
         </fieldset>
 
-        <label>Virtual:</label>
         <fieldset>
           <input
             {...register("virtual")}
             className={styles.checkbox}
             type="checkbox"
           />
-          <label>Virtual:</label>
+          <label>
+            Is Virtual: (if selected, will ALSO show programs that are virtual)
+          </label>
         </fieldset>
 
-        <label>Has Cost:</label>
         <fieldset>
           <input
             {...register("hasCost")}
             className={styles.checkbox}
             type="checkbox"
           />
-          <label>Has Cost:</label>
+          <label>
+            Has Cost: (if selected, will ALSO show programs that have a cost)
+          </label>
         </fieldset>
 
         <button type="submit" className="btn-green">
@@ -211,4 +214,124 @@ export default function Filter({ onSubmit }) {
       </div>
     </form>
   );
+}
+
+export function filterPrograms(posts, filters) {
+  function filterSubject(r) {
+    if (filters.subject && filters.subject.length > 0) {
+      if (filters.subject.includes(r.subject)) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterType(r) {
+    if (filters.type && filters.type.length > 0) {
+      if (filters.type.includes(r.type)) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterGrade(r) {
+    if (filters.grade) {
+      if (r.grade.includes(filters.grade / 1)) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterVirtual(r) {
+    if (filters.virtual === false) {
+      //If user set "Virtual" to false
+      if (!r.virtual) {
+        //Then only add programs not virtual
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterHasCost(r) {
+    if (filters.hasCost === false) {
+      //If user set "Show Programs with Cost" to false
+      if (!r.hasCost) {
+        //Then only add programs with no cost
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterPays(r) {
+    if (filters.pays && filters.pays === true) {
+      //If user sets "Program will pay you" to true
+      if (r.pays) {
+        //Then only add programs that will pay
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterTitle(r) {
+    if (filters.search && filters.search != "") {
+      if (
+        r.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+        r.description.toLowerCase().includes(filters.search.toLowerCase())
+      ) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+
+  const intersection = (arr1, arr2) => {
+    const res = [];
+    for (let i = 0; i < arr1.length; i++) {
+      if (!arr2.includes(arr1[i])) {
+        continue;
+      }
+      res.push(arr1[i]);
+    }
+    return res;
+  };
+  const intersectMany = (...arrs) => {
+    let res = arrs[0].slice();
+    for (let i = 1; i < arrs.length; i++) {
+      res = intersection(res, arrs[i]);
+    }
+    return res;
+  };
+
+  var subjectResult = posts.filter(filterSubject).map((r) => r.title);
+  var typeResult = posts.filter(filterType).map((r) => r.title);
+  var gradeResult = posts.filter(filterGrade).map((r) => r.title);
+  var virtualResult = posts.filter(filterVirtual).map((r) => r.title);
+  var hasCostResult = posts.filter(filterHasCost).map((r) => r.title);
+  var paysResult = posts.filter(filterPays).map((r) => r.title);
+  var titleResult = posts.filter(filterTitle).map((r) => r.title);
+  const programTitles = intersectMany(
+    titleResult,
+    virtualResult,
+    typeResult,
+    subjectResult,
+    gradeResult,
+    hasCostResult,
+    paysResult
+  );
+
+  var finalFilter = [];
+
+  posts.forEach((program) => {
+    if (programTitles.includes(program.title)) {
+      finalFilter.push(program);
+    }
+  });
+
+  return finalFilter;
 }

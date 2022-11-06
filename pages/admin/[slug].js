@@ -316,23 +316,41 @@ function PostForm({ postRef, defaultValues, preview }) {
           }}
         />
 
-        <label>Students will be payed:</label>
-        <select {...register("pays", { required: checkValid })}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
+        <fieldset>
+          <input
+            {...register("pays")}
+            className={styles.checkbox}
+            name="pays"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["pays"]}
+          />
+          <label>Pays</label>
+        </fieldset>
 
-        <label>Program is virtual:</label>
-        <select {...register("virtual", { required: checkValid })}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
+        <fieldset>
+          <input
+            {...register("virtual")}
+            className={styles.checkbox}
+            name="virtual"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["virtual"]}
+          />
+          <label>Virtual</label>
+        </fieldset>
 
-        <label>Program has a cost:</label>
-        <select {...register("hasCost", { required: checkValid })}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
+        <fieldset>
+          <input
+            {...register("hasCost")}
+            className={styles.checkbox}
+            name="hasCost"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["hasCost"]}
+          />
+          <label>Has Cost</label>
+        </fieldset>
 
         <label>Program primarily looks for students who are:</label>
         <Controller
@@ -391,29 +409,39 @@ function PostForm({ postRef, defaultValues, preview }) {
           }}
         />
 
-        <label>
-          Program ONLY accepts students who are First Generation college
-          students:
-        </label>
-        <select {...register("firstgen", { required: checkValid })}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
-
-        <label>Program ONLY accepts students who are low income:</label>
-        <select {...register("income", { required: checkValid })}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
-
-        <fieldset {...register("published")}>
+        <fieldset>
           <input
+            {...register("firstgen")}
+            className={styles.checkbox}
+            name="firstgen"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["firstgen"]}
+          />
+          <label>First Gen</label>
+        </fieldset>
+
+        <fieldset>
+          <input
+            {...register("income")}
+            className={styles.checkbox}
+            name="income"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["income"]}
+          />
+          <label>Low Income</label>
+        </fieldset>
+
+        <fieldset>
+          <input
+            {...register("published")}
             className={styles.checkbox}
             name="published"
             type="checkbox"
             onClick={() => setCheckValid(!checkValid)}
             // disabled={!isDirty || !isValid}
-            defaultChecked={checkValid ? true : false}
+            defaultChecked={checkValid}
           />
           <label>Published</label>
         </fieldset>
