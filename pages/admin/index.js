@@ -27,8 +27,8 @@ export default function AdminPostsPage(props) {
     <main>
       <AuthCheck>
         <PremiumCheck>
-          <PostList />
           <CreateNewPost />
+          <PostList />
         </PremiumCheck>
       </AuthCheck>
     </main>

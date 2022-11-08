@@ -244,39 +244,6 @@ export function filterPrograms(posts, filters) {
       return r;
     }
   }
-  function filterVirtual(r) {
-    if (filters.virtual === false) {
-      //If user set "Virtual" to false
-      if (!r.virtual) {
-        //Then only add programs not virtual
-        return r;
-      }
-    } else {
-      return r;
-    }
-  }
-  function filterHasCost(r) {
-    if (filters.hasCost === false) {
-      //If user set "Show Programs with Cost" to false
-      if (!r.hasCost) {
-        //Then only add programs with no cost
-        return r;
-      }
-    } else {
-      return r;
-    }
-  }
-  function filterPays(r) {
-    if (filters.pays && filters.pays === true) {
-      //If user sets "Program will pay you" to true
-      if (r.pays) {
-        //Then only add programs that will pay
-        return r;
-      }
-    } else {
-      return r;
-    }
-  }
   function filterTitle(r) {
     if (filters.search && filters.search != "") {
       if (
@@ -311,18 +278,12 @@ export function filterPrograms(posts, filters) {
   var subjectResult = posts.filter(filterSubject).map((r) => r.title);
   var typeResult = posts.filter(filterType).map((r) => r.title);
   var gradeResult = posts.filter(filterGrade).map((r) => r.title);
-  var virtualResult = posts.filter(filterVirtual).map((r) => r.title);
-  var hasCostResult = posts.filter(filterHasCost).map((r) => r.title);
-  var paysResult = posts.filter(filterPays).map((r) => r.title);
   var titleResult = posts.filter(filterTitle).map((r) => r.title);
   const programTitles = intersectMany(
     titleResult,
-    virtualResult,
     typeResult,
     subjectResult,
-    gradeResult,
-    hasCostResult,
-    paysResult
+    gradeResult
   );
 
   var finalFilter = [];

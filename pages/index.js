@@ -43,12 +43,12 @@ export async function getServerSideProps(context) {
 
 export default function Home(props) {
   const [posts, setPosts] = useState(props.posts);
-  const [filteredPosts, setFilteredPosts] = useState(posts);
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
 
-  const [filters, setFilters] = useState([]);
+  const [savedFilters, setSavedFilters] = useState(null);
+  const [filterParameters, setFilteredParameters] = useState([]);
 
   // Get next page in pagination query
   const getMorePosts = async () => {
@@ -64,25 +64,64 @@ export default function Home(props) {
     const postsQuery = query(
       ref,
       where("published", "==", true),
+      ...filterParameters, //This line takes care of making sure only filtered posts are gotten
       orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
 
-    const newPosts = (await getDocs(postsQuery)).docs.map((doc) => doc.data());
-
-    setPosts(posts.concat(newPosts));
-    setLoading(false);
+    let newPosts = (await getDocs(postsQuery)).docs.map((doc) => doc.data());
 
     if (newPosts.length < LIMIT) {
       setPostsEnd(true);
     }
+
+    console.log("setFilters 2: " + savedFilters);
+    if (filterParameters.length > 0) {
+      //Final filtering that needs to be done. Does not run if user didn't set filters
+      newPosts = filterPrograms(newPosts, savedFilters);
+    }
+
+    setPosts(posts.concat(newPosts));
+    setLoading(false);
   };
 
-  useEffect(() => {
-    console.log(JSON.stringify(filters));
-    setFilteredPosts(filterPrograms(posts, filters));
-  }, [posts, filters]);
+  const queryFilteredPosts = async (filters) => {
+    const ref = collectionGroup(getFirestore(), "posts");
+
+    let filterParameters = [];
+
+    if (filters.pays === true) {
+      filterParameters.push(where("pays", "==", true));
+    }
+    if (filters.virtual === false) {
+      filterParameters.push(where("virtual", "==", false));
+    }
+    if (filters.hasCost === false) {
+      filterParameters.push(where("hasCost", "==", false));
+    }
+
+    if (filters.subject && filters.subject.length > 0) {
+      filterParameters.push(where("subject", "in", filters.subject));
+    } else if (filters.type && filters.type.length > 0) {
+      filterParameters.push(where("type", "in", filters.type));
+    }
+
+    setFilteredParameters(filterParameters);
+
+    const postsQuery = query(
+      ref,
+      where("published", "==", true),
+      ...filterParameters,
+      orderBy("createdAt", "desc"),
+      limit(LIMIT)
+    );
+
+    let queryResults = (await getDocs(postsQuery)).docs.map(postToJSON);
+    queryResults = filterPrograms(queryResults, filters);
+
+    setPosts(queryResults);
+  };
 
   return (
     <main>
@@ -93,12 +132,14 @@ export default function Home(props) {
         <p>Welcome!</p>
       </div>
       <Filter
-        onSubmit={(data) => {
-          setFilters(data);
+        onSubmit={(filters) => {
+          setSavedFilters(filters);
+          console.log("running query");
+          queryFilteredPosts(filters);
         }}
       ></Filter>
 
-      <PostFeed posts={filteredPosts} />
+      <PostFeed posts={posts} />
 
       {!loading && !postsEnd && (
         <button onClick={getMorePosts}>Load more</button>
