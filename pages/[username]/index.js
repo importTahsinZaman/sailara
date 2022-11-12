@@ -7,6 +7,8 @@ import {
   limit,
   orderBy,
   getFirestore,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import UserProfile from "../../components/UserProfile";
 import Metatags from "../../components/Metatags";
@@ -20,6 +22,8 @@ import AuthCheck from "../../components/AuthCheck";
 import { Filter } from "../../components/Filter.js";
 import { auth } from "../../lib/firebase";
 import { signOut } from "firebase/auth";
+
+import toast from "react-hot-toast";
 
 export async function getServerSideProps({ query: urlQuery }) {
   const { username } = urlQuery;
@@ -50,17 +54,31 @@ export async function getServerSideProps({ query: urlQuery }) {
   }
 
   return {
-    props: { user, posts }, // will be passed to the page component as props
+    props: { user, userDocPath: userDoc.ref.path, posts }, // will be passed to the page component as props
   };
 }
 
-export default function UserProfilePage({ user, posts }) {
+export default function UserProfilePage({ user, userDocPath, posts }) {
   const { username } = useContext(UserContext);
   const router = useRouter();
 
   const signOutNow = () => {
     signOut(auth);
     router.reload();
+  };
+
+  const saveUserPreferences = async (filters) => {
+    const preferencesQuery = doc(getFirestore(), userDocPath);
+    await updateDoc(preferencesQuery, {
+      subject_preference: filters.subject || [],
+      type_preference: filters.type || [],
+      grade_preference: filters.grade,
+      pays_preference: filters.pays,
+      virtual_preference: filters.virtual,
+      hasCost_preference: filters.hasCost,
+    });
+
+    toast.success("Preferences Updated Successfully!");
   };
 
   return (
@@ -75,7 +93,7 @@ export default function UserProfilePage({ user, posts }) {
           <button onClick={signOutNow}>Sign Out</button>
           <Filter
             onSubmit={(filters) => {
-              console.log("save");
+              saveUserPreferences(filters);
             }}
             buttonText={"Save"}
           ></Filter>
