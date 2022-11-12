@@ -1,20 +1,10 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useContext } from "react";
 import { UserContext } from "../lib/context";
-import { auth } from "../lib/firebase";
-import { signOut } from "firebase/auth";
 
 // Top navbar
 export default function Navbar() {
   const { user, username, premium } = useContext(UserContext);
-
-  const router = useRouter();
-
-  const signOutNow = () => {
-    signOut(auth);
-    router.reload();
-  };
 
   return (
     <nav className="navbar">
@@ -29,9 +19,6 @@ export default function Navbar() {
         {username && premium && (
           <>
             <li className="push-left">
-              <button onClick={signOutNow}>Sign Out</button>
-            </li>
-            <li>
               <Link href="/admin">
                 <button className="btn-blue">Manage Posts</button>
               </Link>
@@ -48,9 +35,6 @@ export default function Navbar() {
         {username && !premium && (
           <>
             <li className="push-left">
-              <button onClick={signOutNow}>Sign Out</button>
-            </li>
-            <li>
               <Link href="/upgrade">
                 <button className="btn-blue">Write Posts</button>
               </Link>
@@ -65,11 +49,18 @@ export default function Navbar() {
 
         {/* user is not signed OR has not created username */}
         {!username && (
-          <li>
-            <Link href="/enter">
-              <button className="btn-blue">Log in</button>
-            </Link>
-          </li>
+          <>
+            <li className="push-left">
+              <Link href="/enter">
+                <button className="btn-blue">Write Posts</button>
+              </Link>
+            </li>
+            <li>
+              <Link href="/enter">
+                <button className="btn-blue">Log in</button>
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </nav>

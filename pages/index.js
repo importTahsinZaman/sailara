@@ -47,8 +47,8 @@ export default function Home(props) {
 
   const [postsEnd, setPostsEnd] = useState(false);
 
-  const [savedFilters, setSavedFilters] = useState(null);
-  const [filterParameters, setFilteredParameters] = useState([]);
+  const [savedFilters, setSavedFilters] = useState(null); //Used for custom filter function
+  const [filterParameters, setFilteredParameters] = useState([]); //Used to build query, need state for this to use in load more posts
 
   // Get next page in pagination query
   const getMorePosts = async () => {
@@ -76,7 +76,6 @@ export default function Home(props) {
       setPostsEnd(true);
     }
 
-    console.log("setFilters 2: " + savedFilters);
     if (filterParameters.length > 0) {
       //Final filtering that needs to be done. Does not run if user didn't set filters
       newPosts = filterPrograms(newPosts, savedFilters);
@@ -127,16 +126,17 @@ export default function Home(props) {
     <main>
       <Metatags title="Home Page" description="development" />
 
-      <div className="card card-info">
+      {/* <div className="card card-info">
         <h2>WIP Sailara</h2>
         <p>Welcome!</p>
-      </div>
+      </div> */}
       <Filter
         onSubmit={(filters) => {
           setSavedFilters(filters);
           console.log("running query");
           queryFilteredPosts(filters);
         }}
+        buttonText={"Filter"}
       ></Filter>
 
       <PostFeed posts={posts} />

@@ -2,7 +2,7 @@ import styles from "../styles/Admin.module.css";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 
-export function Filter({ onSubmit }) {
+export function Filter({ onSubmit, buttonText }) {
   const {
     register,
     handleSubmit,
@@ -191,6 +191,7 @@ export function Filter({ onSubmit }) {
             {...register("virtual")}
             className={styles.checkbox}
             type="checkbox"
+            defaultChecked={true}
           />
           <label>
             Is Virtual: (if selected, will ALSO show programs that are virtual)
@@ -202,6 +203,7 @@ export function Filter({ onSubmit }) {
             {...register("hasCost")}
             className={styles.checkbox}
             type="checkbox"
+            defaultChecked={true}
           />
           <label>
             Has Cost: (if selected, will ALSO show programs that have a cost)
@@ -209,7 +211,7 @@ export function Filter({ onSubmit }) {
         </fieldset>
 
         <button type="submit" className="btn-green">
-          Filter
+          {buttonText}
         </button>
       </div>
     </form>
