@@ -47,7 +47,7 @@ export default function Home(props) {
 
   const [postsEnd, setPostsEnd] = useState(false);
 
-  const [savedFilters, setSavedFilters] = useState(null); //Used for custom filter function
+  const [savedFilters, setSavedFilters] = useState(null); //Used in custom filter function
   const [filterParameters, setFilteredParameters] = useState([]); //Used to build query, need state for this to use in load more posts
 
   // Get next page in pagination query
