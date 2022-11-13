@@ -72,10 +72,11 @@ export default function UserProfilePage({ user, userDocPath, posts }) {
     await updateDoc(preferencesQuery, {
       subject_preference: filters.subject || [],
       type_preference: filters.type || [],
-      grade_preference: filters.grade,
+      grade_preference: filters.grade / 1,
       pays_preference: filters.pays,
       virtual_preference: filters.virtual,
       hasCost_preference: filters.hasCost,
+      email_preference: filters.email_preference,
     });
 
     toast.success("Preferences Updated Successfully!");
@@ -96,6 +97,7 @@ export default function UserProfilePage({ user, userDocPath, posts }) {
               saveUserPreferences(filters);
             }}
             buttonText={"Save"}
+            userProfile={true}
           ></Filter>
         </AuthCheck>
       ) : (

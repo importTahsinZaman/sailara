@@ -2,7 +2,7 @@ import styles from "../styles/Admin.module.css";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 
-export function Filter({ onSubmit, buttonText }) {
+export function Filter({ onSubmit, buttonText, userProfile }) {
   const {
     register,
     handleSubmit,
@@ -180,10 +180,7 @@ export function Filter({ onSubmit, buttonText }) {
             className={styles.checkbox}
             type="checkbox"
           />
-          <label>
-            Pays: (optional, if not selected will show all, if selected will
-            show just those that pay)
-          </label>
+          <label>Pays: (if selected, will ONLY show programs that pay)</label>
         </fieldset>
 
         <fieldset>
@@ -209,6 +206,20 @@ export function Filter({ onSubmit, buttonText }) {
             Has Cost: (if selected, will ALSO show programs that have a cost)
           </label>
         </fieldset>
+
+        {userProfile && (
+          <fieldset>
+            <input
+              {...register("email_preference")}
+              className={styles.checkbox}
+              type="checkbox"
+              defaultChecked={true}
+            />
+            <label>
+              Send me emails for opportunities that fit my preferences
+            </label>
+          </fieldset>
+        )}
 
         <button type="submit" className="btn-green">
           {buttonText}

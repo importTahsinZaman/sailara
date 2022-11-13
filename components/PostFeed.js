@@ -24,6 +24,11 @@ function PostItem({ post, admin = false }) {
               <button className="btn-blue">Edit</button>
             </h3>
           </Link>
+          <Link href={`/admin/${post.slug}/email`}>
+            <h3>
+              <button className="btn-green">Email</button>
+            </h3>
+          </Link>
 
           {post.published ? (
             <p className="text-success">Live</p>
