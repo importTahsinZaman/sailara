@@ -17,6 +17,9 @@ import { useDocumentDataOnce } from "../../lib/reactFirebaseHooks.ts";
 import { useForm, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
+import axios from "axios";
+
+import { geohashForLocation } from "geofire-common";
 
 export default function AdminPostEdit(props) {
   return (
@@ -80,6 +83,7 @@ function PostForm({ postRef, defaultValues, preview }) {
     formState: { errors },
     reset,
     control,
+    getValues,
   } = useForm({
     defaultValues,
     mode: "onChange",
@@ -87,20 +91,22 @@ function PostForm({ postRef, defaultValues, preview }) {
 
   const updatePost = async ({
     subject,
+    delivery,
     type,
-    description,
-    duration,
-    link,
-    published,
+    session_start,
+    session_length,
+    cost,
+    college_credit,
     grade,
     pays,
-    virtual,
-    hasCost,
-    race,
-    ethnicity,
-    gender,
-    firstgen,
-    income,
+    demographic_restriction,
+    location,
+    location_restriction,
+    deadline,
+    description,
+    attendance,
+    link,
+    published,
   }) => {
     if (checkValid) {
       published = true;
@@ -111,54 +117,97 @@ function PostForm({ postRef, defaultValues, preview }) {
     if (grade == undefined) {
       grade = [];
     }
-    if (race == undefined) {
-      race = [];
+
+    if (!useDemographic || demographic_restriction == undefined) {
+      demographic_restriction = false;
     }
-    if (ethnicity == undefined) {
-      ethnicity = [];
+
+    if (!useLocation || location_restriction == undefined) {
+      location_restriction = false;
     }
-    if (gender == undefined) {
-      gender = [];
+
+    let coords = {};
+    let hash = null;
+    if (checkValid) {
+      await getCoords(location).then((response) => {
+        coords = response;
+        hash = geohashForLocation([coords.lat, coords.lon]);
+      });
     }
+    console.log(deadline);
+    let formatted_deadline = deadline.split("-");
+    console.log(
+      `${formatted_deadline[1]}-${formatted_deadline[2]}-${formatted_deadline[0]}`
+    );
 
     await updateDoc(postRef, {
       subject,
+      delivery,
       type,
-      description,
-      duration,
-      link,
+      session_start,
+      session_length,
+      cost,
+      college_credit,
       grade,
       pays,
-      virtual,
-      hasCost,
-      race,
-      ethnicity,
-      gender,
-      firstgen,
-      income,
+      demographic_restriction,
+      location,
+      location_restriction,
+      coords: coords,
+      hash: hash,
+      deadline: new Date(
+        `${formatted_deadline[1]}-${formatted_deadline[2]}-${formatted_deadline[0]}`
+      ),
+      description,
+      attendance,
+      link,
       published,
       updatedAt: serverTimestamp(),
     });
 
     reset({
       subject,
+      delivery,
       type,
-      description,
-      published,
-      duration,
-      link,
+      session_start,
+      session_length,
+      cost,
+      college_credit,
       grade,
       pays,
-      virtual,
-      hasCost,
-      race,
-      ethnicity,
-      gender,
-      firstgen,
-      income,
+      demographic_restriction,
+      location,
+      location_restriction,
+      description,
+      attendance,
+      deadline,
+      link,
+      published,
     });
 
     toast.success("Post updated successfully!");
+  };
+
+  const getCoords = async (query) => {
+    const apiKey = "f37e890dd41d4a1da92c0572c6a1ddee";
+    let lat,
+      lon = null;
+    var config = {
+      method: "get",
+      url: `https://api.geoapify.com/v1/geocode/search?text=${query}&format=json&apiKey=${apiKey}`,
+      headers: {},
+    };
+
+    await axios(config)
+      .then(function (response) {
+        lat = response.data.results[0].lat;
+        lon = response.data.results[0].lon;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return { lat, lon };
   };
 
   const gradeOptions = [
@@ -168,39 +217,14 @@ function PostForm({ postRef, defaultValues, preview }) {
     { value: 12, label: "12" },
   ];
 
-  const raceOptions = [
+  const demographicOptions = [
+    { value: "Underrepresented Gender", label: "Underrepresented Gender" },
     {
-      value: "American Indian or Alaskan Native",
-      label: "American Indian or Alaskan Native",
+      value: "Underrepresented Race/Ethnicity",
+      label: "Underrepresented Race/Ethnicity",
     },
-    { value: "Asian", label: "Asian" },
-    { value: "Black or African American", label: "Black or African American" },
-    {
-      value: "Native Hawaiian or Pacific Islander",
-      label: "Native Hawaiian or Pacific Islander",
-    },
-    { value: "White", label: "White" },
-    { value: "Other", label: "Other" },
-  ];
-
-  const ethnicityOptions = [
-    {
-      value: "Not of Hispanic, Latino/a/x, or Spanish origin",
-      label: "Not of Hispanic, Latino/a/x, or Spanish origin",
-    },
-    {
-      value: "Mexican, Mexican American, Chicano/a/x",
-      label: "Mexican, Mexican American, Chicano/a/x",
-    },
-    { value: "Puerto Rican", label: "Puerto Rican" },
-    { value: "Cuban", label: "Cuban" },
-    { value: "Other", label: "Other" },
-  ];
-
-  const genderOptions = [
-    { value: "Male", label: "Male" },
-    { value: "Female", label: "Female" },
-    { value: "Other/Multiple", label: "Other/Multiple" },
+    { value: "First Generation", label: "First Generation" },
+    { value: "Low Income", label: "Low Income" },
   ];
 
   //To check for form validity if user clicked the "publish" button
@@ -217,6 +241,13 @@ function PostForm({ postRef, defaultValues, preview }) {
       console.log("Err with getting select defaults OR new post " + err);
     }
   };
+
+  const [useDemographic, setUseDemographic] = useState(
+    defaultValues["demographic_restriction"] !== false
+  );
+  const [useLocation, setUseLocation] = useState(
+    defaultValues["location_restriction"] !== false
+  );
 
   return (
     <form onSubmit={handleSubmit(updatePost)}>
@@ -259,6 +290,14 @@ function PostForm({ postRef, defaultValues, preview }) {
           <option value="Web Design">Web Design</option>
         </select>
 
+        <label>Program Delivery:</label>
+        <select {...register("delivery", { required: checkValid })}>
+          <option value="In-Person Commuter">In-Person Commuter</option>
+          <option value="In-Person Residential">In-Person Residential</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
+
         <label>Program Type:</label>
         <select {...register("type", { required: checkValid })}>
           <option value="Summer Program">Summer Program</option>
@@ -269,35 +308,60 @@ function PostForm({ postRef, defaultValues, preview }) {
           <option value="Scholarship">Scholarship</option>
         </select>
 
-        <label>Program Description:</label>
-        <textarea
-          {...register("description", {
-            required: checkValid,
-            minLength: checkValid ? 50 : 0,
-            maxLength: checkValid ? 1000 : 10000000,
-          })}
-        ></textarea>
+        <label>Session Start:</label>
+        <select {...register("session_start", { required: checkValid })}>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
+        </select>
 
-        <label>Program Duration/Attendance Requirements:</label>
-        <textarea
-          {...register("duration", {
-            required: checkValid,
-            minLength: checkValid ? 10 : 0,
-            maxLength: checkValid ? 100 : 10000000,
-          })}
-        ></textarea>
+        <label>Session Length:</label>
+        <select {...register("session_length", { required: checkValid })}>
+          <option value="1 week">1 week</option>
+          <option value="2 weeks">2 weeks</option>
+          <option value="3 weeks">3 weeks</option>
+          <option value="4 weeks">4 weeks</option>
+          <option value="5 weeks">5 weeks</option>
+          <option value="6 weeks">6 weeks</option>
+          <option value="2 months">2 months</option>
+          <option value="3 months">3 months</option>
+          <option value="4 months">4 months</option>
+          <option value="5+ months">5+ months</option>
+          <option value="School Year">School Year</option>
+          <option value="Other">Other</option>
+        </select>
 
-        <label>Website/Infographic Link:</label>
-        <input
-          type="text"
-          {...register("link", {
-            required: checkValid,
-            pattern:
-              /((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi,
-          })}
-        ></input>
+        <label>Minimum Cost:</label>
+        <select {...register("cost", { required: checkValid })}>
+          <option value="Free">Free</option>
+          <option value="<$500">{`<$500`}</option>
+          <option value="$500 - $1,499">$500 - $1,499</option>
+          <option value="$1,500 - $2,999">$1,500 - $2,999</option>
+          <option value="> $3,000">{`> $3,000`}</option>
+        </select>
 
-        <label>Student Grade (rising grade if summer program):</label>
+        <fieldset>
+          <input
+            {...register("college_credit")}
+            className={styles.checkbox}
+            name="college_credit"
+            type="checkbox"
+            // disabled={!isDirty || !isValid}
+            defaultChecked={defaultValues["pays"]}
+          />
+          <label>Awards College Credit</label>
+        </fieldset>
+
+        <label>Entering Grade (Or Current Grade if School Year):</label>
         <Controller
           name="grade"
           rules={{ required: checkValid }}
@@ -322,7 +386,7 @@ function PostForm({ postRef, defaultValues, preview }) {
             className={styles.checkbox}
             name="pays"
             type="checkbox"
-            // disabled={!isDirty || !isValid}
+            // isabled={!isDirty || !isValid}
             defaultChecked={defaultValues["pays"]}
           />
           <label>Pays</label>
@@ -330,117 +394,122 @@ function PostForm({ postRef, defaultValues, preview }) {
 
         <fieldset>
           <input
-            {...register("virtual")}
-            className={styles.checkbox}
-            name="virtual"
             type="checkbox"
-            // disabled={!isDirty || !isValid}
-            defaultChecked={defaultValues["virtual"]}
+            defaultChecked={useDemographic}
+            className={styles.checkbox}
+            onClick={() => {
+              setUseDemographic(!useDemographic);
+            }}
           />
-          <label>Virtual</label>
+          <label>Demographic Restrictions</label>
         </fieldset>
+        {useDemographic && (
+          <Controller
+            name="demographic_restriction"
+            rules={{ required: useDemographic && checkValid }}
+            control={control}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <Select
+                  options={demographicOptions}
+                  closeMenuOnSelect={false}
+                  isDisabled={!useDemographic}
+                  isMulti
+                  value={demographicOptions.find((c) => c.value === value)}
+                  onChange={(val) => onChange(val.map((c) => c.value))}
+                  defaultValue={get_select_defaults("demographic_restriction")}
+                ></Select>
+              );
+            }}
+          />
+        )}
+
+        <label>
+          Program Address (Enter even if no restriction by location):
+        </label>
+        <input
+          {...register("location", {
+            required: checkValid,
+          })}
+          placeholder="Street Address"
+        ></input>
+        <button
+          type="button"
+          onClick={(e) => {
+            getCoords(getValues("location")).then((response) => {
+              window.open(
+                `https://google.com/maps/place/(${response.lat},${response.lon})`,
+                "_blank"
+              );
+            });
+          }}
+        >
+          Check Address Validity
+        </button>
 
         <fieldset>
           <input
-            {...register("hasCost")}
-            className={styles.checkbox}
-            name="hasCost"
             type="checkbox"
-            // disabled={!isDirty || !isValid}
-            defaultChecked={defaultValues["hasCost"]}
-          />
-          <label>Has Cost</label>
-        </fieldset>
-
-        <label>Program primarily looks for students who are:</label>
-        <Controller
-          name="ethnicity"
-          rules={{ required: checkValid }}
-          control={control}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Select
-                options={ethnicityOptions}
-                closeMenuOnSelect={false}
-                isMulti
-                value={ethnicityOptions.find((c) => c.value === value)}
-                onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("ethnicity")}
-              ></Select>
-            );
-          }}
-        />
-
-        <label>Program primarily looks for students who are:</label>
-        <Controller
-          name="race"
-          rules={{ required: checkValid }}
-          control={control}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Select
-                options={raceOptions}
-                closeMenuOnSelect={false}
-                isMulti
-                value={raceOptions.find((c) => c.value === value)}
-                onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("race")}
-              ></Select>
-            );
-          }}
-        />
-
-        <label>Program primarily looks for students who identify as:</label>
-        <Controller
-          name="gender"
-          rules={{ required: checkValid }}
-          control={control}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Select
-                options={genderOptions}
-                closeMenuOnSelect={false}
-                isMulti
-                value={genderOptions.find((c) => c.value === value)}
-                onChange={(val) => onChange(val.map((c) => c.value))}
-                defaultValue={get_select_defaults("gender")}
-              ></Select>
-            );
-          }}
-        />
-
-        <fieldset>
-          <input
-            {...register("firstgen")}
             className={styles.checkbox}
-            name="firstgen"
-            type="checkbox"
-            // disabled={!isDirty || !isValid}
-            defaultChecked={defaultValues["firstgen"]}
+            defaultChecked={useLocation}
+            onClick={() => {
+              setUseLocation(!useLocation);
+            }}
           />
-          <label>First Gen</label>
+          <label>Location Restriction</label>
         </fieldset>
+        {useLocation && (
+          <select
+            {...register("location_restriction", {
+              required: useLocation && checkValid,
+            })}
+          >
+            <option value="By City">By City</option>
+            <option value="By State">By State</option>
+          </select>
+        )}
 
-        <fieldset>
-          <input
-            {...register("income")}
-            className={styles.checkbox}
-            name="income"
-            type="checkbox"
-            // disabled={!isDirty || !isValid}
-            defaultChecked={defaultValues["income"]}
-          />
-          <label>Low Income</label>
-        </fieldset>
+        <label>Application Deadline</label>
+        <input
+          {...register("deadline")}
+          type="date"
+          // value={defaultValues["deadline"].toString()}
+          // min="2022-01-01"
+        ></input>
 
+        <label>Program Description:</label>
+        <textarea
+          {...register("description", {
+            required: checkValid,
+            minLength: checkValid ? 50 : 0,
+            maxLength: checkValid ? 1000 : 10000000,
+          })}
+        ></textarea>
+
+        <label>Attendance Requirements:</label>
+        <textarea
+          {...register("attendance", {
+            required: checkValid,
+            minLength: checkValid ? 10 : 0,
+            maxLength: checkValid ? 100 : 10000000,
+          })}
+        ></textarea>
+
+        <label>Website/Infographic Link:</label>
+        <input
+          type="text"
+          {...register("link", {
+            required: checkValid,
+            pattern:
+              /((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi,
+          })}
+        ></input>
         <fieldset>
           <input
             {...register("published")}
             className={styles.checkbox}
-            name="published"
             type="checkbox"
             onClick={() => setCheckValid(!checkValid)}
-            // disabled={!isDirty || !isValid}
             defaultChecked={checkValid}
           />
           <label>Published</label>

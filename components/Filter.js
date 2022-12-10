@@ -118,62 +118,6 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
           <option value={12}>12</option>
         </select>
 
-        {/* <label>I identify as (ethnicity):</label>
-        <select {...register("ethnicity")}>
-          <option value="Not of Hispanic, Latino/a/x, or Spanish origin">
-            Not of Hispanic, Latino/a/x, or Spanish origin
-          </option>
-          <option value="Mexican, Mexican American, Chicano/a/x">
-            Mexican, Mexican American, Chicano/a/x
-          </option>
-          <option value="Puerto Rican">Puerto Rican</option>
-          <option value="Cuban">Cuban</option>
-          <option value="Other">Other</option>
-        </select> */}
-
-        {/* <label>I identify as (race):</label>
-        <select {...register("race")}>
-          <option value="American Indian or Alaskan Native">
-            American Indian or Alaskan Native
-          </option>
-          <option value="Asian">Asian</option>
-          <option value="Black or African American">
-            Black or African American
-          </option>
-          <option value="Native Hawaiian or Pacific Islander">
-            Native Hawaiian or Pacific Islander
-          </option>
-          <option value="White">White</option>
-          <option value="Other">Other</option>
-        </select> */}
-
-        {/* <label>I identify as (gender):</label>
-        <select {...register("gender")}>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other/Multiple">Other/Multiple</option>
-        </select> */}
-
-        {/* <label>I am a first generation college student:</label>
-        <fieldset>
-          <input
-            {...register("firstgen")}
-            className={styles.checkbox}
-            type="checkbox"
-          />
-          <label>firstgen</label>
-        </fieldset> */}
-
-        {/* <label>I am low income:</label>
-        <fieldset>
-          <input
-            {...register("income")}
-            className={styles.checkbox}
-            type="checkbox"
-          />
-          <label>low income</label>
-        </fieldset> */}
-
         <fieldset>
           <input
             {...register("pays")}
@@ -181,30 +125,6 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
             type="checkbox"
           />
           <label>Pays: (if selected, will ONLY show programs that pay)</label>
-        </fieldset>
-
-        <fieldset>
-          <input
-            {...register("virtual")}
-            className={styles.checkbox}
-            type="checkbox"
-            defaultChecked={true}
-          />
-          <label>
-            Is Virtual: (if selected, will ALSO show programs that are virtual)
-          </label>
-        </fieldset>
-
-        <fieldset>
-          <input
-            {...register("hasCost")}
-            className={styles.checkbox}
-            type="checkbox"
-            defaultChecked={true}
-          />
-          <label>
-            Has Cost: (if selected, will ALSO show programs that have a cost)
-          </label>
         </fieldset>
 
         {userProfile && (
