@@ -90,20 +90,35 @@ export default function Home(props) {
 
     let filterParameters = [];
 
-    if (filters.pays === true) {
+    if (filters.pays.includes(true)) {
       filterParameters.push(where("pays", "==", true));
     }
-    if (filters.virtual === false) {
-      filterParameters.push(where("virtual", "==", false));
+    if (filters.college_credit.includes(true)) {
+      filterParameters.push(where("college_credit", "==", true));
     }
-    if (filters.hasCost === false) {
-      filterParameters.push(where("hasCost", "==", false));
+    if (filters.demographic_restriction.includes(false)) {
+      filterParameters.push(where("demographic_restriction", "==", false));
+    }
+    if (filters.location_restriction.includes(false)) {
+      filterParameters.push(where("location_restriction", "==", false));
     }
 
     if (filters.subject && filters.subject.length > 0) {
       filterParameters.push(where("subject", "in", filters.subject));
     } else if (filters.type && filters.type.length > 0) {
       filterParameters.push(where("type", "in", filters.type));
+    } else if (filters.delivery && filters.delivery.length > 0) {
+      filterParameters.push(where("delivery", "in", filters.delivery));
+    } else if (filters.session_start && filters.session_start.length > 0) {
+      filterParameters.push(
+        where("session_start", "in", filters.session_start)
+      );
+    } else if (filters.session_length && filters.session_length.length > 0) {
+      filterParameters.push(
+        where("session_length", "in", filters.session_length)
+      );
+    } else if (filters.cost && filters.cost.length > 0) {
+      filterParameters.push(where("cost", "in", filters.cost));
     }
 
     setFilteredParameters(filterParameters);
@@ -132,9 +147,10 @@ export default function Home(props) {
       </div> */}
       <Filter
         onSubmit={(filters) => {
-          setSavedFilters(filters);
-          console.log("running query");
-          queryFilteredPosts(filters);
+          console.log(filters);
+          // setSavedFilters(filters);
+          // console.log("running query");
+          // queryFilteredPosts(filters);
         }}
         buttonText={"Filter"}
       ></Filter>

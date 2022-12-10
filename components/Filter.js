@@ -47,6 +47,13 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
     { value: "Web Design", label: "Web Design" },
   ];
 
+  const deliveryOptions = [
+    { value: "In-Person Commuter", label: "In-Person Commuter" },
+    { value: "In-Person Residential", label: "In-Person Residential" },
+    { value: "Virtual", label: "Virtual" },
+    { value: "Hybrid", label: "Hybrid" },
+  ];
+
   const typeOptions = [
     { value: "Summer Program", label: "Summer Program" },
     { value: "School Year Program", label: "School Year Program" },
@@ -54,6 +61,70 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
     { value: "Internship", label: "Internship" },
     { value: "College Prep Program", label: "College Prep Program" },
     { value: "Scholarship", label: "Scholarship" },
+  ];
+
+  const sessionStartOptions = [
+    { value: "January", label: "January" },
+    { value: "February", label: "February" },
+    { value: "March", label: "March" },
+    { value: "April", label: "April" },
+    { value: "May", label: "May" },
+    { value: "June", label: "June" },
+    { value: "July", label: "July" },
+    { value: "August", label: "August" },
+    { value: "September", label: "September" },
+    { value: "October", label: "October" },
+    { value: "November", label: "November" },
+    { value: "December", label: "December" },
+  ];
+
+  const sessionLengthOptions = [
+    { value: "1 week", label: "1 week" },
+    { value: "2 weeks", label: "2 weeks" },
+    { value: "3 weeks", label: "3 weeks" },
+    { value: "4 weeks", label: "4 weeks" },
+    { value: "5 weeks", label: "5 weeks" },
+    { value: "6 weeks", label: "6 weeks" },
+    { value: "2 months", label: "2 months" },
+    { value: "3 months", label: "3 months" },
+    { value: "4 months", label: "4 months" },
+    { value: "5+ months", label: "5+ months" },
+    { value: "School Year", label: "School Year" },
+    { value: "Other", label: "Other" },
+  ];
+
+  const costOptions = [
+    { value: "Free", label: "Free" },
+    { value: "<$500", label: "<$500" },
+    { value: "$500 - $1,499", label: "$500 - $1,499" },
+    { value: "$1,500 - $2,999", label: "$1,500 - $2,999" },
+    { value: "> $3,000", label: "> $3,000" },
+  ];
+
+  const collegeCreditOptions = [
+    { value: true, label: "Yes, program offers college credit" },
+  ];
+
+  const gradeOptions = [
+    { value: 9, label: "9" },
+    { value: 10, label: "10" },
+    { value: 11, label: "11" },
+    { value: 12, label: "12" },
+  ];
+
+  const paysOptions = [
+    { value: true, label: "Yes, program pays students for participation" },
+  ];
+
+  const demographicOptions = [
+    {
+      value: false,
+      label: "No, admission is not based on student's demographic",
+    },
+  ];
+
+  const locationOptions = [
+    { value: false, label: "No, admission is not based on student's location" },
   ];
 
   const get_select_defaults = (field) => {
@@ -72,7 +143,6 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.controls}>
-        <label>Subject:</label>
         <Controller
           name="subject"
           // rules={{ required: true }}
@@ -85,13 +155,14 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
                 isMulti
                 value={subjectOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Subject</div>
+                }
                 // defaultValue={get_select_defaults("grade")}
               ></Select>
             );
           }}
         />
-
-        <label>Type:</label>
         <Controller
           name="type"
           // rules={{ required: true }}
@@ -104,28 +175,205 @@ export function Filter({ onSubmit, buttonText, userProfile }) {
                 isMulti
                 value={typeOptions.find((c) => c.value === value)}
                 onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Type</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+        <Controller
+          name="delivery"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={deliveryOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={deliveryOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Delivery</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+        <Controller
+          name="grade"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={gradeOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={gradeOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Entering Grade</div>
+                }
                 // defaultValue={get_select_defaults("grade")}
               ></Select>
             );
           }}
         />
 
-        <label>Grade:</label>
-        <select {...register("grade")}>
-          <option value={9}>9</option>
-          <option value={10}>10</option>
-          <option value={11}>11</option>
-          <option value={12}>12</option>
-        </select>
+        <Controller
+          name="session_start"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={sessionStartOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={sessionStartOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Session Start</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
 
-        <fieldset>
-          <input
-            {...register("pays")}
-            className={styles.checkbox}
-            type="checkbox"
-          />
-          <label>Pays: (if selected, will ONLY show programs that pay)</label>
-        </fieldset>
+        <Controller
+          name="session_length"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={sessionLengthOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={sessionLengthOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Session Length</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="cost"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={costOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={costOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Minimum Cost</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="college_credit"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={collegeCreditOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={collegeCreditOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">College Credit</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="pays"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={paysOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={paysOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">Pays</div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="demographic_restriction"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={demographicOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={demographicOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">
+                    Demographic Restrictions
+                  </div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
+
+        <Controller
+          name="location_restriction"
+          // rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                options={locationOptions}
+                closeMenuOnSelect={false}
+                isMulti
+                value={locationOptions.find((c) => c.value === value)}
+                onChange={(val) => onChange(val.map((c) => c.value))}
+                placeholder={
+                  <div className="select-placeholder-text">
+                    Location Restrictions
+                  </div>
+                }
+                // defaultValue={get_select_defaults("grade")}
+              ></Select>
+            );
+          }}
+        />
 
         {userProfile && (
           <fieldset>
@@ -168,21 +416,45 @@ export function filterPrograms(posts, filters) {
       return r;
     }
   }
-  function filterGrade(r) {
-    if (filters.grade) {
-      if (r.grade.includes(filters.grade / 1)) {
+  function filterDelivery(r) {
+    if (filters.delivery && filters.delivery.length > 0) {
+      if (filters.delivery.includes(r.delivery)) {
         return r;
       }
     } else {
       return r;
     }
   }
-  function filterTitle(r) {
-    if (filters.search && filters.search != "") {
-      if (
-        r.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        r.description.toLowerCase().includes(filters.search.toLowerCase())
-      ) {
+  function filterGrade(r) {
+    if (filters.grade && filters.grade.length > 0) {
+      if (filters.grade.some((x) => r.includes(x))) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterSessionStart(r) {
+    if (filters.session_start && filters.session_start.length > 0) {
+      if (filters.session_start.includes(r.session_start)) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterSessionLength(r) {
+    if (filters.session_length && filters.session_length.length > 0) {
+      if (filters.session_length.includes(r.session_length)) {
+        return r;
+      }
+    } else {
+      return r;
+    }
+  }
+  function filterCost(r) {
+    if (filters.cost && filters.cost.length > 0) {
+      if (filters.cost.includes(r.cost)) {
         return r;
       }
     } else {
@@ -210,13 +482,22 @@ export function filterPrograms(posts, filters) {
 
   var subjectResult = posts.filter(filterSubject).map((r) => r.title);
   var typeResult = posts.filter(filterType).map((r) => r.title);
+  var deliveryResult = posts.filter(filterDelivery).map((r) => r.title);
   var gradeResult = posts.filter(filterGrade).map((r) => r.title);
-  var titleResult = posts.filter(filterTitle).map((r) => r.title);
+  var sessionStartResult = posts.filter(filterSessionStart).map((r) => r.title);
+  var sessionLengthResult = posts
+    .filter(filterSessionLength)
+    .map((r) => r.title);
+  var costResult = posts.filter(filterCost).map((r) => r.title);
+
   const programTitles = intersectMany(
-    titleResult,
-    typeResult,
     subjectResult,
-    gradeResult
+    typeResult,
+    deliveryResult,
+    gradeResult,
+    sessionStartResult,
+    sessionLengthResult,
+    costResult
   );
 
   var finalFilter = [];
