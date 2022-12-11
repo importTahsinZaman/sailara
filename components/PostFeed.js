@@ -12,8 +12,17 @@ function PostItem({ post, admin = false }) {
   return (
     <div className="card">
       <h1>{post.title}</h1>
-      <p>{post.subject + " - " + post.type}</p>
+      <p>{post.subject}</p>
+      <p>{post.delivery}</p>
+      <p>{post.type}</p>
+      <p>{post.session_start}</p>
+      <p>{post.session_length}</p>
+      <p>{post.cost}</p>
+      <p>{post.college_credit}</p>
+      <p>{post.pays}</p>
       <p>{post.description}</p>
+      {/* <p>{post.deadline}</p> */}
+      <p>{post.location}</p>
       <p>{post.duration}</p>
 
       {/* If admin view, show extra controls for user */}

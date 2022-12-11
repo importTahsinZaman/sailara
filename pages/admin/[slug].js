@@ -525,6 +525,15 @@ function PostForm({ postRef, defaultValues, preview }) {
         {checkValid && errors.description?.type === "maxLength" && (
           <p className="text-danger">Description Is Too Long to publish</p>
         )}
+        {checkValid && errors.attendance?.type === "required" && (
+          <p className="text-danger">attendance Is Required To Publish</p>
+        )}
+        {checkValid && errors.attendance?.type === "minLength" && (
+          <p className="text-danger">attendance Is Too Short to publish</p>
+        )}
+        {checkValid && errors.attendance?.type === "maxLength" && (
+          <p className="text-danger">attendance Is Too Long to publish</p>
+        )}
 
         {checkValid && errors.duration?.type === "required" && (
           <p className="text-danger">Duration Is Required To Publish</p>
@@ -544,14 +553,15 @@ function PostForm({ postRef, defaultValues, preview }) {
         {checkValid && errors.grade?.type === "required" && (
           <p className="text-danger">Grade is required to publish</p>
         )}
-        {checkValid && errors.race?.type === "required" && (
-          <p className="text-danger">Race is required to publish</p>
+        {checkValid && errors.demographic_restriction?.type === "required" && (
+          <p className="text-danger">
+            demographic_restriction is required to publish
+          </p>
         )}
-        {checkValid && errors.ethnicity?.type === "required" && (
-          <p className="text-danger">Ethnicity is required to publish</p>
-        )}
-        {checkValid && errors.gender?.type === "required" && (
-          <p className="text-danger">Gender is required to publish</p>
+        {checkValid && errors.location_restriction?.type === "required" && (
+          <p className="text-danger">
+            location_restriction is required to publish
+          </p>
         )}
 
         <button type="submit" className="btn-green">
