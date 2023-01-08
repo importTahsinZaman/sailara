@@ -11,12 +11,19 @@ Sailara is a platform that seeks to bring together three main user groups: Stude
 
 ## The Site (Or atleast as much of it I was able to build out - No Styling)
 
+### This was the skeleton for the home page which students would use to filter for and find programs that interested them:
+![Home/Filtering Page](https://user-images.githubusercontent.com/86907892/211186731-bf243ebb-5d4d-47fe-855b-8c008e0a2261.png)
+
+### Program Managers would pay a monthly fee to have "Educator" access which allowed them to make posts:
+![Monthly Subscription](https://user-images.githubusercontent.com/86907892/211186659-2d685e42-ec04-42c4-8a54-089dea2890fa.png)
+
+### Paying educators were then granted access to this page where they could manage all their posts:
 ![Post Management Page](https://user-images.githubusercontent.com/86907892/211186714-a65bbb90-2fa9-4633-bc84-ef1065870abc.png)
 
+### The Interface for educators to make posts:
 ![Post Editing UI](https://user-images.githubusercontent.com/86907892/211186581-b11ffb6a-fb42-4c5f-82cc-6d650907058b.png)
 
-![Filter Options](https://user-images.githubusercontent.com/86907892/211186534-414e94c1-84b8-4509-aba4-81640b1fbcc2.png)
-
+### Students could preset filtering options through which they would be emailed about posts:
 ![User Profile Options](https://user-images.githubusercontent.com/86907892/211186628-ec2a720b-8238-4682-bf37-fe825df52ec7.png)
 
-![Monthly Subscription](https://user-images.githubusercontent.com/86907892/211186659-2d685e42-ec04-42c4-8a54-089dea2890fa.png)
+
