@@ -5,6 +5,8 @@ Sailara was a startup I worked on with a friend from July 2022 to January 2023. 
 ## The idea
 
 Sailara is a platform that seeks to bring together three main user groups: Students, Nonprofits, and Donors. Essentially, nonprofits post their opportunities on Sailara and students can filter these opportunities and find ones that suit them. As students participate with these nonprofits, points are added to their accounts. Eventually, students can cash in their points for scholarship money that is provided by donors. Donors gain marketability as well as an avenue through which they can give back to their communities. Donors can choose to give access to their scholarships to students who are participating in causes the donor believes in such as environmentalism or social justice. On the other hand, students gain free access to invaluable opportunities and don't have to sacrifice their family's livelihoods to participate. Nonprofits gain increased participation and no longer have to worry about compensating students themselves and also have access to our built-in email marketing tool, which allows them to target students who have expressed interest in programs similar to theirs.
+
 ![The Concept](https://user-images.githubusercontent.com/86907892/211186364-a834271b-d85a-4cb7-b45e-761bfbe27cd2.png)
+![User Group Relationships](https://user-images.githubusercontent.com/86907892/211186455-f79cc06e-f1e0-4162-b464-6cadeba8abc7.png)
 
 ## Why it failed
