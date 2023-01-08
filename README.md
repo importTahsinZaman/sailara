@@ -9,9 +9,11 @@ Sailara is a platform that seeks to bring together three main user groups: Stude
 ![The Concept](https://user-images.githubusercontent.com/86907892/211186364-a834271b-d85a-4cb7-b45e-761bfbe27cd2.png)
 ![User Group Relationships](https://user-images.githubusercontent.com/86907892/211186455-f79cc06e-f1e0-4162-b464-6cadeba8abc7.png)
 
-## The Site (or atleast as much of it I was able to build out)
+## The Site (Or atleast as much of it I was able to build out - No Styling)
 
-![image](https://user-images.githubusercontent.com/86907892/211186581-b11ffb6a-fb42-4c5f-82cc-6d650907058b.png)
+![Post Management Page](https://user-images.githubusercontent.com/86907892/211186714-a65bbb90-2fa9-4633-bc84-ef1065870abc.png)
+
+![Post Editing UI](https://user-images.githubusercontent.com/86907892/211186581-b11ffb6a-fb42-4c5f-82cc-6d650907058b.png)
 
 ![Filter Options](https://user-images.githubusercontent.com/86907892/211186534-414e94c1-84b8-4509-aba4-81640b1fbcc2.png)
 
