@@ -1,6 +1,6 @@
 ## Overview
 
-Sailara was a startup I worked on with a friend from July 2022 to January 2023. Unfortunately, the project never launched, but the process was an incredible learning experience. I became more skilled with various technologies (NextJS, React, Firebase, Stripe), how to validate startup ideas, the importance of UI/UX, how to communicate better, how to deal with rejection (or just straight up being ignored), and much, much, much more. This readme is a writeup of all my takeaways from this experience so that my future self can refer back to it when I inevitably find myself in front of the same roadblocks again.  
+Sailara was a startup I worked on with a friend from July 2022 to January 2023. Unfortunately, the project never launched, but the process was an incredible learning experience. I became more skilled with various technologies (NextJS, React, Firebase, Stripe), how to validate startup ideas, the importance of UI/UX, how to communicate, how to deal with rejection (or just straight up being ignored), and much, much, much more. This readme is a writeup of all my takeaways from this experience so that my future self can refer back to it when I inevitably find myself in front of the same roadblocks again.  
 
 ## The idea
 
@@ -39,7 +39,18 @@ My cofounder and I were convinced that students were dying to participate in mor
 
 But at some point (months in) we thought it may be helpful to start speaking to some of these nonprofits, and it just so happened that our very first interview was with a nonprofit in the exact situation we were hoping to solve. They told us about how Covid19 halved their student population and how a platform like ours would be an instant investment. With this one single spark of false hope in hand, we decided our idea was fully validated and ignored  the few other interviews we did with nonprofits who did not seem nearly as enthusiastic.
 
-I largely blame my own enthusiasm and blind-sidedness caused by the fact that I am a developer for us making this mistake. My answer to everything is to write more code and I falsely believed that all I needed to provide was an app and that everyone would be so awestruck they would start handing us money straight away. It unfortunately does not work like that (especially if you're asking for even 5 cents from your user.) Creating software that someone thinks is cool and "might use" is very different from them pulling out their wallet, taking out their credit card, filling out their payment info, and actually keeping their subscription up.
+I largely blame my own enthusiasm and blind-sidedness caused by the fact that I am a developer for us making this mistake. My answer to everything is to write more code and I falsely believed that all I needed to provide was a website and that everyone would be so awestruck they would start handing us money straight away. It unfortunately does not work like that (especially if you're asking for even 5 cents from your user.) Creating software that someone thinks is cool and "might use" is very different from them pulling out their wallet, taking out their credit card, filling out their payment info, and actually keeping their subscription up.
 
 User validation is everything.
+
+### 2. Perfectionism
+
+I was obsessed from the beginning in the idea of buiding a "perfect" site. I wanted to learn and implement all the latest new web technologies and build the most robust website imaginable. Ironically, this hindered progress. ALOT. Instead of making an MVP which we could hand to users and get feedback straight away, I was obsessed with the notion of a giant launch. That one day where we made posts on all our social medias and everyone would blow up the website and money would rain down upon us. The long engineering process caused me to lose motivation and the vision we had initially. The honeymoon phase with the idea was gone and when motivation ran low, I was forced to take steps backwards and realize the many mistakes we'd already made.
+
+99.99% of your users don't care about your tech stack. They only care if their problem is being solved for a price they are willing to pay. Create something jank, understand what needs to be added, removed, and upgraded, and do that thing and nothing more. Iteration and failing fast is key.
+
+### 3. False drive and naiveté
+
+This one is the hardest to admit but likely the root of the first two points of failure. I romantacized the idea of people paying for my software. I fantasized about how succesful this whole thing would be and how much "clout" it would produce for me. I did not approach this project with the mind of a businessman, analyzing potential, questioning assumptions, and seeking to maximize revenue. Instead, I just wanted something I could say I was working on because that's what gets peoples' attention.
+
 
