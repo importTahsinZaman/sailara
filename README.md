@@ -51,6 +51,6 @@ I was obsessed from the beginning in the idea of buiding a "perfect" site. I wan
 
 ### 3. False drive and naiveté
 
-This one is the hardest to admit but likely the root of the first two points of failure. I romantacized the idea of people paying for my software. I fantasized about how succesful this whole thing would be and how much "clout" it would produce for me. I did not approach this project with the mind of a businessman, analyzing potential, questioning assumptions, and seeking to maximize revenue. Instead, I just wanted something I could say I was working on because that's what gets peoples' attention.
+This one is the hardest to admit but likely the root of the first two points of failure. I romantacized the idea of people paying for software I made myself. I fantasized about how succesful this whole thing would be. I did not approach this project with the mind of a businessman, analyzing potential, questioning assumptions, and seeking to maximize revenue. Instead, I just wanted something I could say I was working on because that's what gets peoples' attention.
 
 
