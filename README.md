@@ -37,16 +37,10 @@ Sailara is a platform that seeks to bring together three main user groups: Stude
 
 My cofounder and I were convinced that students were dying to participate in more programs and that programs dearly needed some way to reach out to more students. Because of this, we immediately began working on Sailara. I profusely began programming while he started to create a list of nonprofits we could reach out to. 
 
-But at some point (months in) we thought it may be helpful to start speaking to some of these nonprofits, and it just so happened that our very first interview was with a nonprofit in the exact situation we were hoping to solve. They told us about how Covid19 halved their student count and how a platform like ours would be an instant investment. With this one single spark of false hope in hand, we decided our idea was fully validated and ignored  the few other interviews we did with nonprofits who did not seem nearly as enthusiastic.
-
-I largely blame my own enthusiasm and blind-sidedness caused by the fact that I am a developer for us making this mistake. My answer to everything is to write more code and I falsely believed that all I needed to provide was a website and that everyone would be so awestruck they would start handing us money straight away. It unfortunately does not work like that (especially if you're asking for even 5 cents from your user.) Creating software that someone thinks is cool and "might use" is very different from them pulling out their wallet, taking out their credit card, filling out their payment info, and actually keeping their subscription up.
-
 User validation is everything.
 
 ### 2. Perfectionism
 
-I was obsessed from the beginning in the idea of buiding a "perfect" site. I wanted to learn and implement all the latest new web technologies and build the most robust website imaginable. Ironically, this hindered progress. ALOT. Instead of making an MVP which we could hand to users and get feedback straight away, I was obsessed with the notion of a giant launch. That one day where we made posts on all our social medias and everyone would blow up the website. The long engineering process caused me to lose motivation and the vision we had initially. The honeymoon phase with the idea was gone and when motivation ran low, I was forced to take steps backwards and realize the many mistakes we'd already made.
-
-99.99% of your users don't care about your tech stack. They only care if their problem is being solved for a price they are willing to pay. Create something jank, understand what needs to be added, removed, and upgraded, and do that thing and nothing more. Iteration and failing fast is key.
+I was obsessed from the beginning in the idea of buiding a "perfect" site. I wanted to learn and implement all the latest new web technologies and build the most robust website imaginable.
 
 
